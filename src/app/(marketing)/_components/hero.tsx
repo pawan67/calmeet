@@ -1,17 +1,18 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
+import { HeroParallax } from "@/components/ui/hero-parallax";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 
 const HeroComponent = () => {
+  const { isSignedIn, isLoaded, user } = useUser();
+
   return (
-    <div>
-      <div className=" my-20 max-w-3xl mx-auto ">
-        <img
-          src="/hero_xmas-rev.webp"
-          alt="hero"
-          className=" object-cover w-full h-full"
-        />
-        <div className=" md:text-center mt-10">
+    <div className=" ">
+      <div className=" my-40   max-w-3xl  ">
+        <img src="/images/logo.png" alt="hero" className=" w-36 " />
+        <div className="  mt-10">
           <h1 className=" text-2xl md:text-4xl font-bold ">
             Welcome to CalMeet, Your Ultimate Meeting and Scheduling Solution
           </h1>
@@ -23,34 +24,120 @@ const HeroComponent = () => {
           </h3>
 
           <div>
-            <Button>Get Started</Button>
+            {isSignedIn ? (
+              <Button className="    rounded-full font-semibold px-5">
+                Enter Calmeet
+              </Button>
+            ) : (
+              <SignInButton mode="modal">
+                <Button className="  rounded-full font-semibold px-5">
+                  Get Started
+                </Button>
+              </SignInButton>
+            )}
           </div>
         </div>
       </div>
 
-      <ContainerScroll
-        titleComponent={
-          <>
-            <h1 className="text-4xl font-semibold text-black dark:text-white">
-              Everything you need in a <br />
-              <span className="text-4xl md:text-[6rem] font-bold mt-1 leading-none">
-                Scheduling app
-              </span>
-            </h1>
-          </>
-        }
-      >
-        <Image
-          src={`/linear.webp`}
-          alt="hero"
-          height={720}
-          width={1400}
-          className="mx-auto rounded-2xl object-cover h-full object-left-top"
-          draggable={false}
-        />
-      </ContainerScroll>
+      <HeroParallax products={products} />
     </div>
   );
 };
+
+export const products = [
+  {
+    title: "Moonbeam",
+    link: "https://gomoonbeam.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/moonbeam.png",
+  },
+  {
+    title: "Cursor",
+    link: "https://cursor.so",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/cursor.png",
+  },
+  {
+    title: "Rogue",
+    link: "https://userogue.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/rogue.png",
+  },
+
+  {
+    title: "Editorially",
+    link: "https://editorially.org",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/editorially.png",
+  },
+  {
+    title: "Editrix AI",
+    link: "https://editrix.ai",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/editrix.png",
+  },
+  {
+    title: "Pixel Perfect",
+    link: "https://app.pixelperfect.quest",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/pixelperfect.png",
+  },
+
+  {
+    title: "Algochurn",
+    link: "https://algochurn.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/algochurn.png",
+  },
+  {
+    title: "Aceternity UI",
+    link: "https://ui.aceternity.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/aceternityui.png",
+  },
+  {
+    title: "Tailwind Master Kit",
+    link: "https://tailwindmasterkit.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/tailwindmasterkit.png",
+  },
+  {
+    title: "SmartBridge",
+    link: "https://smartbridgetech.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/smartbridge.png",
+  },
+  {
+    title: "Renderwork Studio",
+    link: "https://renderwork.studio",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/renderwork.png",
+  },
+
+  {
+    title: "Creme Digital",
+    link: "https://cremedigital.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/cremedigital.png",
+  },
+  {
+    title: "Golden Bells Academy",
+    link: "https://goldenbellsacademy.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/goldenbellsacademy.png",
+  },
+  {
+    title: "Invoker Labs",
+    link: "https://invoker.lol",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/invoker.png",
+  },
+  {
+    title: "E Free Invoice",
+    link: "https://efreeinvoice.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/efreeinvoice.png",
+  },
+];
 
 export default HeroComponent;
