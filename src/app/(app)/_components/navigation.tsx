@@ -42,7 +42,10 @@ const Navigation = () => {
           {navOptions.map((option, index) => {
             if (option.onlyForMobile) return null;
             return (
-              <div className=" cursor-pointer rounded-md  hover:bg-primary/5  flex items-center gap-2 p-3 py-2 text-sm ">
+              <div
+                key={index}
+                className=" cursor-pointer rounded-md  hover:bg-primary/5  flex items-center gap-2 p-3 py-2 text-sm "
+              >
                 {<option.icon size={20} />}
                 <span>{option.name}</span>
               </div>
@@ -55,7 +58,10 @@ const Navigation = () => {
       <div className=" bg-secondary/40 backdrop-blur-md border-t p-3 px-5  fixed inset-x-0 bottom-0  md:hidden">
         <div className="flex items-center justify-around max-w-md mx-auto">
           {navOptions.map((option, index) => (
-            <div className=" cursor-pointer text-muted-foreground hover:text-primary  flex flex-col items-center justify-center ">
+            <div
+              key={index}
+              className=" cursor-pointer text-muted-foreground hover:text-primary  flex flex-col items-center justify-center "
+            >
               <option.icon size={20} />
               <span className=" text-xs mt-1">{option.name}</span>
             </div>
