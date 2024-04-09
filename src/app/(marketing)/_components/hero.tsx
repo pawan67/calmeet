@@ -4,20 +4,34 @@ import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { HeroParallax } from "@/components/ui/hero-parallax";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
-
+import { motion } from "framer-motion";
 const HeroComponent = () => {
   const { isSignedIn, isLoaded, user } = useUser();
 
   return (
     <div className=" ">
-      <div className=" my-40   max-w-3xl  ">
-        <img src="/images/logo.png" alt="hero" className=" w-36 " />
+      <div className=" my-20   max-w-3xl  ">
+        <motion.img
+          animate={{
+            scale: [0.8, 1],
+            // jiggle effect
+            rotate: [0, 5, -5, 5, -5, 0],
+            // jiggle effect with position
+            y: [0, -5, 5, -5, 5, 0],
+            x: [0, 5, -5, 5, -5, 0],
+          }}
+          drag
+          dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+          src="/images/logo.png"
+          alt="hero"
+          className=" w-36 "
+        />
         <div className="  mt-10">
           <h1 className=" text-2xl md:text-4xl font-bold ">
-            Welcome to CalMeet, Your Ultimate Meeting and Scheduling Solution
+            Welcome to Calmeet,
           </h1>
 
-          <h3 className=" my-3 md:my-5  md:text-xl font-semibold  text-muted-foreground">
+          <h3 className=" my-3 md:my-5  md:text-xl   text-muted-foreground">
             Your one-stop solution for seamless meeting scheduling. Say goodbye
             to endless email exchanges and hello to streamlined planning and
             collaboration.

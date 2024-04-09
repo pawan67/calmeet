@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { SignInButton, useUser } from "@clerk/nextjs";
-
+import Link from "next/link";
 const Header = () => {
   const { isSignedIn, isLoaded, user } = useUser();
   return (
@@ -12,9 +12,11 @@ const Header = () => {
       </div>
       <div>
         {isSignedIn ? (
-          <Button className="  rounded-full font-semibold px-5">
-            Enter Calmeet
-          </Button>
+          <Link href="/dashboard">
+            <Button className="  rounded-full font-semibold px-5">
+              Enter Calmeet
+            </Button>
+          </Link>
         ) : (
           <SignInButton mode="modal">
             <Button className="  rounded-full font-semibold px-5">Login</Button>
