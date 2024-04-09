@@ -4,7 +4,7 @@ import { IconPlus } from "@tabler/icons-react";
 const Dashboard = () => {
   return (
     <div className=" w-full">
-      <div className=" flex w-full justify-between">
+      <div className=" hidden  md:flex w-full justify-between">
         <div>
           <h3 className=" font-bold text-xl">Event Types</h3>
           <p className=" text-muted-foreground">
@@ -14,10 +14,11 @@ const Dashboard = () => {
         <div>
           <Button size="sm">
             <IconPlus className=" mr-1" size={20} />
-            New 
+            New
           </Button>
         </div>
       </div>
+      dsfdsfds
     </div>
   );
 };

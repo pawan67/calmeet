@@ -16,9 +16,6 @@ const HeroComponent = () => {
             scale: [0.8, 1],
             // jiggle effect
             rotate: [0, 5, -5, 5, -5, 0],
-            // jiggle effect with position
-            y: [0, -5, 5, -5, 5, 0],
-            x: [0, 5, -5, 5, -5, 0],
           }}
           drag
           dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
@@ -39,12 +36,12 @@ const HeroComponent = () => {
 
           <div>
             {isSignedIn ? (
-              <Button className="    rounded-full font-semibold px-5">
+              <Button variant="secondary" className="     font-semibold px-5">
                 Enter Calmeet
               </Button>
             ) : (
               <SignInButton mode="modal">
-                <Button className="  rounded-full font-semibold px-5">
+                <Button variant="secondary" className="   font-semibold px-5">
                   Get Started
                 </Button>
               </SignInButton>
