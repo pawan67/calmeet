@@ -13,3 +13,16 @@ datasource db {
   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
+
+
+model EventType {
+  id        String      @id @default(uuid())
+  title      String   
+  color     String?
+  durationInMinutes  Int?      @default(0)
+  isDefault Boolean @default(false)
+  active   Boolean @default(true)
+  link     String?
+  description String?
+  authorId String?
+}

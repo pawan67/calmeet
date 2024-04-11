@@ -8,6 +8,7 @@ import {
 } from "@tabler/icons-react";
 import UserItem from "./user-item";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 
 const Navigation = () => {
   const navOptions = [
@@ -34,6 +35,8 @@ const Navigation = () => {
       onlyForMobile: true,
     },
   ];
+
+  const pathname = usePathname();
   return (
     <>
       <div className=" bg-secondary/40 backdrop-blur-md hidden md:block border-r px-4 py-4 w-[250px] h-screen">
@@ -44,7 +47,9 @@ const Navigation = () => {
             return (
               <div
                 key={index}
-                className=" cursor-pointer rounded-md  hover:bg-primary/5  flex items-center gap-2 p-3 py-2 text-sm "
+                className={`cursor-pointer rounded-md ${
+                  pathname == option.url && "bg-primary/20"
+                }  hover:bg-primary/5  flex items-center gap-2 p-3 py-2 text-sm`}
               >
                 {<option.icon size={20} />}
                 <span>{option.name}</span>
@@ -60,7 +65,11 @@ const Navigation = () => {
           {navOptions.map((option, index) => (
             <div
               key={index}
-              className=" cursor-pointer text-muted-foreground hover:text-primary  flex flex-col items-center justify-center "
+              className={`cursor-pointer ${
+                pathname == option.url
+                  ? "text-primary"
+                  : "text-muted-foreground"
+              } hover:text-primary  flex flex-col items-center justify-center`}
             >
               <option.icon size={20} />
               <span className=" text-xs mt-1">{option.name}</span>
