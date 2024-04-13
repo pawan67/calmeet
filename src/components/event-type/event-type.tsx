@@ -43,6 +43,7 @@ import { toast } from "sonner";
 import React from "react";
 import { Clock9, Pencil } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   title: z.string().min(3),
@@ -157,7 +158,10 @@ const EventTypeComponent = () => {
           </DialogHeader>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-8 w-full max-h-[80vh] overflow-y-auto"
+            >
               <FormField
                 control={form.control}
                 name="title"
@@ -182,7 +186,7 @@ const EventTypeComponent = () => {
                       <Input {...field} />
                     </FormControl>
 
-                    <FormDescription>
+                    <FormDescription className=" line-clamp-1">
                       {`https://calmeet.vercel.app/${
                         field.value || "quick-chat"
                       }`}
@@ -231,23 +235,31 @@ const EventTypeComponent = () => {
           </Form>
         </DialogContent>
       </Dialog>
-      <div className=" mt-5 grid gap-3">
+      <div className=" mt-5 grid ">
         {isLoading ? (
           "Loading"
         ) : (
           <>
             {eventTypes?.map(
-              (eventType: {
-                id: string;
-                title: string;
-                description: string;
-                link: string;
-                color: string;
-                durationInMinutes: number;
-              }) => {
+              (
+                eventType: {
+                  id: string;
+                  title: string;
+                  description: string;
+                  link: string;
+                  color: string;
+                  durationInMinutes: number;
+                },
+                index: number
+              ) => {
                 return (
                   <Card
-                    className=" py-4 px-5 bg-primary-foreground flex items-center justify-between"
+                    className={cn(
+                      `  py-4 px-5 rounded-t-none rounded-b-none bg-primary-foreground flex items-center justify-between`,
+                      ` ${index == 0 && "rounded-t-md"} ${
+                        index == eventTypes.length - 1 && "rounded-b-md"
+                      }   `
+                    )}
                     key={eventType.id}
                   >
                     <div>
@@ -266,8 +278,12 @@ const EventTypeComponent = () => {
                         </div>
                       </Badge>
                     </div>
-
-                    <div>
+                    <div className=" md:hidden">
+                      <Button variant="ghost" size="icon">
+                        <IconDots size={16} />
+                      </Button>
+                    </div>
+                    <div className=" hidden md:flex ">
                       <Button variant="ghost" size="icon">
                         <IconView360 size={16} />
                       </Button>
