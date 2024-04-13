@@ -1,5 +1,6 @@
 "use client";
 
+import { ModeToggle } from "@/components/shared/mode-toggle";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenuTrigger,
@@ -61,6 +62,7 @@ const UserItem = () => {
         <DropdownMenuItem className="w-full cursor-pointer ">
           My Settings
         </DropdownMenuItem>
+        
         <DropdownMenuSeparator />
         <DropdownMenuItem
           asChild

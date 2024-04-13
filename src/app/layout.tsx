@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "dark")}>
+      <body className={cn(inter.className)}>
         <Providers>{children}</Providers>
       </body>
     </html>

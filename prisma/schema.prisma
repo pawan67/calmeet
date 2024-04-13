@@ -24,5 +24,5 @@ model EventType {
   active   Boolean @default(true)
   link     String?
   description String?
-  authorId String?
+  authorId String
 }

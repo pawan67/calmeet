@@ -9,6 +9,7 @@ import {
 import UserItem from "./user-item";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
+import { ModeToggle } from "@/components/shared/mode-toggle";
 
 const Navigation = () => {
   const navOptions = [
@@ -56,6 +57,8 @@ const Navigation = () => {
               </div>
             );
           })}
+
+         
         </div>{" "}
       </div>
 

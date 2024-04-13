@@ -11,7 +11,6 @@ import { Button } from "../ui/button";
 const HomeComponent = () => {
   const { isSignedIn, isLoading, user } = useUser();
 
-  console.log(user);
 
   return (
     <div>
