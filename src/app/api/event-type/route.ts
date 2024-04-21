@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+
 export async function POST(req: Request) {
   try {
     const auth = getAuth(req as NextRequest);

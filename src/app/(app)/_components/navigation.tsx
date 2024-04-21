@@ -41,7 +41,7 @@ const Navigation = () => {
   const pathname = usePathname();
   return (
     <>
-      <div className=" bg-secondary/40 backdrop-blur-md hidden md:block border-r px-4 py-4 w-[250px] h-screen">
+      <div className=" fixed left-0 top-0 bottom-0 width-[230px] bg-secondary/40 backdrop-blur-md hidden md:block border-r px-4 py-4  h-screen">
         <UserItem />
         <div className=" space-y-1 mt-5">
           {navOptions.map((option, index) => {

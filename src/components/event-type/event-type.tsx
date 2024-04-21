@@ -60,7 +60,7 @@ import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
-const formSchema = z.object({
+export const formSchema = z.object({
   title: z.string().min(3),
   color: z.string().optional(),
   durationInMinutes: z.coerce.number().min(10).max(3600).int().optional(),

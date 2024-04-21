@@ -4,9 +4,9 @@ import Navigation from "../_components/navigation";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className=" flex ">
+    <div className="  ">
       <Navigation />
-      <div className=" pt-16 md:pt-5 p-5 flex-1">{children}</div>
+      <div className=" ml-[200px] pt-16 md:pt-5 p-5 md:p-10 ">{children}</div>
     </div>
   );
 };
