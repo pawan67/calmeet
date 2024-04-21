@@ -6,7 +6,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="  ">
       <Navigation />
-      <div className=" ml-[200px] pt-16 md:pt-5 p-5 md:p-10 ">{children}</div>
+      <div className=" md:ml-[200px] pt-16 md:pt-5 p-5 md:p-10 ">{children}</div>
     </div>
   );
 };

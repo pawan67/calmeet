@@ -86,7 +86,7 @@ const EventTypeFormLayout = ({
         <span className=" font-semibold">Go back</span>
       </div>
 
-      <div className=" absolute  grid gap-1 mt-7">
+      <div className=" md:absolute  flex items-center overflow-x-auto md:grid gap-1 mt-7">
         {navLinks.map((navLink) => (
           <NavTabs
             id={id}
@@ -97,7 +97,7 @@ const EventTypeFormLayout = ({
         ))}
       </div>
 
-      <div className="mt-5 ml-[280px] ">
+      <div className="mt-5 md:ml-[280px] ">
         <div className="bg-primary-foreground/10 p-5 rounded-md">
           <h1 className="text-xl font-semibold">Event Setup</h1>
           <p className="text-muted-foreground text-sm mt-2">
@@ -145,7 +145,7 @@ const NavTabs = ({
     <Link
       href={`/dashboard/event-types/${id}?tabName=${navLink.tabName}`}
       key={navLink.tabName}
-      className={`px-5 w-fit  p-3 rounded-md  cursor-pointer ${
+      className={`px-5   p-3 rounded-md  cursor-pointer ${
         tabName === navLink.tabName && "bg-primary-foreground"
       } hover:bg-primary-foreground/40 w-[250px] flex items-center justify-between`}
     >
