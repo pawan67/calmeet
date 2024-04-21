@@ -4,6 +4,14 @@ import { IconDots, IconLink, IconPlus, IconView360 } from "@tabler/icons-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import {
   Dialog,
@@ -22,6 +30,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { set, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,11 +58,12 @@ import React from "react";
 import { Clock9, Pencil } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   title: z.string().min(3),
   color: z.string().optional(),
-  durationInMinutes: z.number().int().optional(),
+  durationInMinutes: z.coerce.number().min(10).max(3600).int().optional(),
   isDefault: z.boolean().default(false),
   active: z.boolean().default(true),
   link: z.string().optional(),
@@ -111,6 +126,8 @@ const EventTypeComponent = () => {
     },
   });
 
+  const router = useRouter();
+
   return (
     <div>
       <div className=" hidden  md:flex w-full justify-between">
@@ -160,7 +177,7 @@ const EventTypeComponent = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 w-full max-h-[80vh] overflow-y-auto"
+              className="space-y-8  "
             >
               <FormField
                 control={form.control}
@@ -252,6 +269,12 @@ const EventTypeComponent = () => {
                 },
                 index: number
               ) => {
+                const copyLinkToClipboard = () => {
+                  navigator.clipboard.writeText(
+                    `https://calmeet.vercel.app/${eventType.link}`
+                  );
+                  toast.success("Link copied to clipboard.");
+                };
                 return (
                   <Card
                     className={cn(
@@ -278,21 +301,63 @@ const EventTypeComponent = () => {
                         </div>
                       </Badge>
                     </div>
-                    <div className=" md:hidden">
-                      <Button variant="ghost" size="icon">
-                        <IconDots size={16} />
-                      </Button>
-                    </div>
-                    <div className=" hidden md:flex ">
-                      <Button variant="ghost" size="icon">
-                        <IconView360 size={16} />
-                      </Button>
-                      <Button variant="ghost" size="icon">
-                        <IconLink size={16} />
-                      </Button>
-                      <Button variant="ghost" size="icon">
-                        <IconDots size={16} />
-                      </Button>
+
+                    <div className=" flex ">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Button
+                              className="hidden md:flex"
+                              variant="ghost"
+                              size="icon"
+                            >
+                              <IconView360 size={16} />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Preview</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Button
+                              className="hidden md:flex"
+                              onClick={copyLinkToClipboard}
+                              variant="ghost"
+                              size="icon"
+                            >
+                              <IconLink size={16} />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copy link to event</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <IconDots size={16} />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              router.push(
+                                `/dashboard/event-types/${eventType.id}?tabName=setup`
+                              )
+                            }
+                          >
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>Duplicate</DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </Card>
                 );

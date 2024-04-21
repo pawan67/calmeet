@@ -10,6 +10,7 @@ import UserItem from "./user-item";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { ModeToggle } from "@/components/shared/mode-toggle";
+import Link from "next/link";
 
 const Navigation = () => {
   const navOptions = [
@@ -46,7 +47,8 @@ const Navigation = () => {
           {navOptions.map((option, index) => {
             if (option.onlyForMobile) return null;
             return (
-              <div
+              <Link
+                href={option.url}
                 key={index}
                 className={`cursor-pointer rounded-md ${
                   pathname == option.url && "bg-primary/20"
@@ -54,11 +56,9 @@ const Navigation = () => {
               >
                 {<option.icon size={20} />}
                 <span>{option.name}</span>
-              </div>
+              </Link>
             );
           })}
-
-         
         </div>{" "}
       </div>
 
@@ -66,7 +66,8 @@ const Navigation = () => {
       <div className=" bg-secondary/40 backdrop-blur-md border-t p-3 px-5  fixed inset-x-0 bottom-0  md:hidden">
         <div className="flex items-center justify-around max-w-md mx-auto">
           {navOptions.map((option, index) => (
-            <div
+            <Link
+              href={option.url}
               key={index}
               className={`cursor-pointer ${
                 pathname == option.url
@@ -76,7 +77,7 @@ const Navigation = () => {
             >
               <option.icon size={20} />
               <span className=" text-xs mt-1">{option.name}</span>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
