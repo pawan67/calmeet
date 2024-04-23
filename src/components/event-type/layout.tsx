@@ -7,12 +7,11 @@ import {
   IconLink,
 } from "@tabler/icons-react";
 import { Button } from "../ui/button";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { EventTypeRequest } from "@/lib/validators/event";
 import { Prisma } from "@prisma/client";
 import { Form, FormProvider, useForm } from "react-hook-form";
-import { formSchema } from "./event-type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -23,6 +22,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import EventTypeEditForm from "./event-form";
 
 const EventTypeFormLayout = ({
   id,
@@ -59,28 +59,17 @@ const EventTypeFormLayout = ({
 
   const searchParams = useSearchParams();
   const tabName = searchParams.get("tabName");
+  const router = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: eventType.title,
-      active: eventType.active,
-      color: "",
-      description: "",
-
-      isDefault: eventType.isDefault,
-      link: "",
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-  }
   return (
     <div>
       <div className=" flex items-center  gap-2">
-        <Button variant="ghost" className="w-8 h-8 rounded-full " size={"icon"}>
+        <Button
+          onClick={() => router.push("/dashboard/event-types")}
+          variant="ghost"
+          className="w-8 h-8 rounded-full "
+          size={"icon"}
+        >
           <IconArrowLeft size={16} />
         </Button>
         <span className=" font-semibold">Go back</span>
@@ -98,30 +87,7 @@ const EventTypeFormLayout = ({
       </div>
 
       <div className="mt-5 md:ml-[280px] ">
-        <div className="bg-primary-foreground/10 p-5 rounded-md">
-          <h1 className="text-xl font-semibold">Event Setup</h1>
-          <p className="text-muted-foreground text-sm mt-2">
-            Set up your event type to get started
-          </p>
-        </div>
-        <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8  ">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Quick Chat" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </form>
-        </FormProvider>
+        <EventTypeEditForm eventType={eventType} />
       </div>
     </div>
   );
