@@ -289,7 +289,7 @@ const EventTypeComponent = () => {
                       <h3 className="  text-sm font-semibold ">
                         {eventType.title}
                       </h3>
-                      <p className="  text-muted-foreground line-clamp-2 font-black">
+                      <p className="  text-muted-foreground line-clamp-2 font-medium">
                         {eventType.description}{" "}
                       </p>
                       <Badge
