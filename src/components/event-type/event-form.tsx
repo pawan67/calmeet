@@ -15,6 +15,9 @@ import { Prisma } from "@prisma/client";
 import { GradientPicker } from "../ui/GradientPicker";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
 
 interface EventTypeEditFormProps {
   eventType: Prisma.EventTypeGetPayload<{
@@ -32,7 +35,9 @@ interface EventTypeEditFormProps {
 }
 
 const EventTypeEditForm = ({ eventType }: EventTypeEditFormProps) => {
-  const [background, setBackground] = useState("#B4D455");
+  const [background, setBackground] = useState(
+    eventType.color ? eventType.color : "#B4D455"
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,7 +58,29 @@ const EventTypeEditForm = ({ eventType }: EventTypeEditFormProps) => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+
+    const payload = {
+      ...values,
+      color: background,
+    };
+
+    mutate(payload);
   }
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      await axios.put(`/api/event-type/${eventType.id}`, values);
+    },
+
+    onSuccess: () => {
+      toast.success("Event type updated");
+    },
+
+    onError: (error) => {
+      console.error(error);
+      toast.error("Failed to update event type");
+    },
+  });
   return (
     <>
       <div
@@ -147,7 +174,9 @@ const EventTypeEditForm = ({ eventType }: EventTypeEditFormProps) => {
             />
           </FormItem>
 
-          <Button type="submit">Save</Button>
+          <Button disabled={isPending} type="submit">
+            {isPending ? "Saving..." : "Save"}
+          </Button>
         </form>
       </FormProvider>
     </>

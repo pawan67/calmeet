@@ -257,7 +257,7 @@ const EventTypeComponent = () => {
           "Loading"
         ) : (
           <>
-            {eventTypes?.map(
+            {eventTypes.map(
               (
                 eventType: {
                   id: string;
@@ -268,105 +268,151 @@ const EventTypeComponent = () => {
                   durationInMinutes: number;
                 },
                 index: number
-              ) => {
-                const copyLinkToClipboard = () => {
-                  navigator.clipboard.writeText(
-                    `https://calmeet.vercel.app/${eventType.link}`
-                  );
-                  toast.success("Link copied to clipboard.");
-                };
-                return (
-                  <Card
-                    className={cn(
-                      `  py-4 px-5 rounded-t-none rounded-b-none bg-primary-foreground flex items-center justify-between`,
-                      ` ${index == 0 && "rounded-t-md"} ${
-                        index == eventTypes.length - 1 && "rounded-b-md"
-                      }   `
-                    )}
-                    key={eventType.id}
-                  >
-                    <div>
-                      <h3 className="  text-sm font-semibold ">
-                        {eventType.title}
-                      </h3>
-                      <p className="  text-muted-foreground line-clamp-2 font-medium">
-                        {eventType.description}{" "}
-                      </p>
-                      <Badge
-                        className=" px-1 rounded-sm mt-2"
-                        variant="default"
-                      >
-                        <div className=" flex items-center gap-1 text-xs">
-                          <Clock9 size={14} /> {eventType.durationInMinutes}m
-                        </div>
-                      </Badge>
-                    </div>
-
-                    <div className=" flex ">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Button
-                              className="hidden md:flex"
-                              variant="ghost"
-                              size="icon"
-                            >
-                              <IconView360 size={16} />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Preview</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Button
-                              className="hidden md:flex"
-                              onClick={copyLinkToClipboard}
-                              variant="ghost"
-                              size="icon"
-                            >
-                              <IconLink size={16} />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Copy link to event</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <IconDots size={16} />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuItem
-                            onClick={() =>
-                              router.push(
-                                `/dashboard/event-types/${eventType.id}?tabName=setup`
-                              )
-                            }
-                          >
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </Card>
-                );
-              }
+              ) => (
+                <EventTypeCard
+                  eventTypes={eventTypes}
+                  key={eventType.id}
+                  eventType={eventType}
+                  index={index}
+                />
+              )
             )}
           </>
         )}
       </div>
     </div>
+  );
+};
+
+const EventTypeCard = ({
+  eventType,
+  index,
+  eventTypes,
+}: {
+  eventType: {
+    id: string;
+    title: string;
+    description: string;
+    link: string;
+    color: string;
+    durationInMinutes: number;
+  };
+  index: number;
+  eventTypes: any;
+}) => {
+  const copyLinkToClipboard = () => {
+    navigator.clipboard.writeText(
+      `https://calmeet.vercel.app/${eventType.link}`
+    );
+    toast.success("Link copied to clipboard.");
+  };
+
+  const router = useRouter();
+
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteEventType } = useMutation({
+    mutationKey: ["delete-event-type"],
+    mutationFn: async () => {
+      toast.promise(axios.delete(`/api/event-type/${eventType.id}`), {
+        loading: "Deleting event...",
+        success: "Event has been deleted.",
+        error: "Failed to delete event.",
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["event-types"],
+      });
+    },
+
+    onError: (error) => {
+      toast.error("Something went wrong. Please try again.");
+    },
+  });
+
+  return (
+    <Card
+      className={cn(
+        `  py-4 px-5 rounded-t-none rounded-b-none bg-primary-foreground flex items-center justify-between`,
+        ` ${index == 0 && "rounded-t-md"} ${
+          index == eventTypes.length - 1 && "rounded-b-md"
+        }   `
+      )}
+      key={eventType.id}
+    >
+      <div>
+        <h3 className="  text-sm font-semibold ">{eventType.title}</h3>
+        <p className="  text-muted-foreground line-clamp-2 font-medium">
+          {eventType.description}{" "}
+        </p>
+        <Badge className=" px-1 rounded-sm mt-2" variant="default">
+          <div className=" flex items-center gap-1 text-xs">
+            <Clock9 size={14} /> {eventType.durationInMinutes}m
+          </div>
+        </Badge>
+      </div>
+
+      <div className=" flex ">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button className="hidden md:flex" variant="ghost" size="icon">
+                <IconView360 size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Preview</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                className="hidden md:flex"
+                onClick={copyLinkToClipboard}
+                variant="ghost"
+                size="icon"
+              >
+                <IconLink size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Copy link to event</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <IconDots size={16} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(
+                  `/dashboard/event-types/${eventType.id}?tabName=setup`
+                )
+              }
+            >
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem>Duplicate</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                deleteEventType();
+              }}
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </Card>
   );
 };
 
