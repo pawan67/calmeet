@@ -10,6 +10,8 @@ const roboto = Roboto({
   subsets: ["latin"],
 });
 
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Calmeet",
   description: "Efficient scheduling and seamless video meetings for all.",
