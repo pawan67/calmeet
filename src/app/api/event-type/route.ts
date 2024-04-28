@@ -1,10 +1,12 @@
 import { db } from "@/lib/db";
 import { EventTypeValidator } from "@/lib/validators/event";
 import { getAuth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
-export const dynamic = "force-dynamic"; // defaults to auto
 
 export async function GET(req: NextRequest) {
+  revalidatePath(req.url);
+
   try {
     const auth = getAuth(req);
 
@@ -32,7 +34,6 @@ export async function GET(req: NextRequest) {
     return new Response(JSON.stringify(error), { status: 500 });
   }
 }
-
 
 export async function POST(req: Request) {
   try {
@@ -85,3 +86,6 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify(error), { status: 500 });
   }
 }
+
+export const dynamic = "force-dynamic"; // defaults to auto
+export const revalidate = 0;

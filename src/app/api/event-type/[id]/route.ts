@@ -145,3 +145,6 @@ export async function DELETE(
     return new Response(JSON.stringify(error), { status: 500 });
   }
 }
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;

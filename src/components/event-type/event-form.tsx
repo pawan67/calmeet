@@ -15,7 +15,7 @@ import { Prisma } from "@prisma/client";
 import { GradientPicker } from "../ui/GradientPicker";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -67,18 +67,20 @@ const EventTypeEditForm = ({ eventType }: EventTypeEditFormProps) => {
     mutate(payload);
   }
 
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       await axios.put(`/api/event-type/${eventType.id}`, values);
+      
     },
 
     onSuccess: () => {
-      toast.success("Event type updated");
+      toast.success("Event type updated!");
+      queryClient.invalidateQueries();
     },
 
     onError: (error) => {
-      console.error(error);
-      toast.error("Failed to update event type");
+      toast.error("An error occurred. Please try again.");
     },
   });
   return (

@@ -54,7 +54,7 @@ import { Input } from "@/components/ui/input";
 import { EventTypeValidator } from "@/lib/validators/event";
 import { Textarea } from "../ui/textarea";
 import { toast } from "sonner";
-import React from "react";
+import React, { useEffect } from "react";
 import { Clock9, Pencil } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
@@ -308,22 +308,16 @@ const EventTypeCard = ({
   };
 
   const router = useRouter();
-
   const queryClient = useQueryClient();
 
-  const { mutate: deleteEventType } = useMutation({
+  const { mutate: deleteEventType, isPending } = useMutation({
     mutationKey: ["delete-event-type"],
     mutationFn: async () => {
-      toast.promise(axios.delete(`/api/event-type/${eventType.id}`), {
-        loading: "Deleting event...",
-        success: "Event has been deleted.",
-        error: "Failed to delete event.",
-      });
+      await axios.delete(`/api/event-type/${eventType.id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["event-types"],
-      });
+      toast.success("Event has been deleted.");
+      queryClient.invalidateQueries();
     },
 
     onError: (error) => {
