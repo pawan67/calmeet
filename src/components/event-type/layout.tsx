@@ -24,30 +24,13 @@ import {
 import { Input } from "../ui/input";
 import EventTypeEditForm from "./event-form";
 
-const EventTypeFormLayout = ({
-  id,
-  eventType,
-}: {
-  id: string;
-  eventType: Prisma.EventTypeGetPayload<{
-    select: {
-      id: true;
-      title: true;
-      isDefault: true;
-      active: true;
-      color: true;
-      durationInMinutes: true;
-      link: true;
-      description: true;
-    };
-  }>;
-}) => {
+const EventTypeFormLayout = ({ id }: { id: string }) => {
   const navLinks = [
     {
       name: "Event Setup",
       icon: IconLink,
       tabName: "setup",
-      description: `${eventType.durationInMinutes} mins`,
+      description: `Update`,
     },
     {
       name: "Availability",
@@ -87,7 +70,7 @@ const EventTypeFormLayout = ({
       </div>
 
       <div className="mt-5 md:ml-[280px] ">
-        <EventTypeEditForm eventType={eventType} />
+        <EventTypeEditForm id={id} />
       </div>
     </div>
   );

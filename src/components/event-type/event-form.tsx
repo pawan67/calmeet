@@ -13,45 +13,52 @@ import { z } from "zod";
 import { Textarea } from "../ui/textarea";
 import { Prisma } from "@prisma/client";
 import { GradientPicker } from "../ui/GradientPicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
+import { getEventTypeById } from "@/lib/handlers/event-type";
+import { useRouter } from "next/navigation";
 
 interface EventTypeEditFormProps {
-  eventType: Prisma.EventTypeGetPayload<{
-    select: {
-      id: true;
-      title: true;
-      isDefault: true;
-      active: true;
-      color: true;
-      durationInMinutes: true;
-      link: true;
-      description: true;
-    };
-  }>;
+  id: string;
 }
 
-const EventTypeEditForm = ({ eventType }: EventTypeEditFormProps) => {
+const EventTypeEditForm = ({ id }: EventTypeEditFormProps) => {
+  const {
+    data: eventType,
+    error,
+    isError,
+    isLoading,
+  } = useQuery({
+    queryKey: ["event-type", id],
+    queryFn: () => getEventTypeById(id),
+  });
+
+  const router = useRouter();
+
+  if (isError) {
+    router.push("/dashboard/event-types");
+  }
+
   const [background, setBackground] = useState(
-    eventType.color ? eventType.color : "#B4D455"
+    eventType?.color ? eventType?.color : "#B4D455"
   );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: eventType.title,
-      active: eventType.active,
-      color: eventType.color ? eventType.color : "#B4D455",
-      description: eventType.description ? eventType.description : "",
-      durationInMinutes: eventType.durationInMinutes
-        ? eventType.durationInMinutes
+      title: eventType?.title ? eventType?.title : "",
+      active: eventType?.active,
+      color: eventType?.color ? eventType?.color : "#B4D455",
+      description: eventType?.description ? eventType?.description : "",
+      durationInMinutes: eventType?.durationInMinutes
+        ? eventType?.durationInMinutes
         : 15,
 
-      isDefault: eventType.isDefault ? eventType.isDefault : false,
-      link: eventType.link ? eventType.link : "",
+      isDefault: eventType?.isDefault ? eventType?.isDefault : false,
+      link: eventType?.link ? eventType?.link : "",
     },
   });
 
@@ -67,11 +74,26 @@ const EventTypeEditForm = ({ eventType }: EventTypeEditFormProps) => {
     mutate(payload);
   }
 
+  useEffect(() => {
+    if (eventType) {
+      setBackground(eventType.color);
+
+      form.reset({
+        title: eventType.title,
+        active: eventType.active,
+        color: eventType.color,
+        description: eventType.description,
+        durationInMinutes: eventType.durationInMinutes,
+        isDefault: eventType.isDefault,
+        link: eventType.link,
+      });
+    }
+  }, [eventType]);
+
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      await axios.put(`/api/event-type/${eventType.id}`, values);
-      
+      await axios.put(`/api/event-type/${eventType?.id}`, values);
     },
 
     onSuccess: () => {
@@ -83,34 +105,20 @@ const EventTypeEditForm = ({ eventType }: EventTypeEditFormProps) => {
       toast.error("An error occurred. Please try again.");
     },
   });
+
+  useEffect(() => {
+    if (isLoading) {
+      toast.loading("Loading event type...");
+    } else {
+      toast.dismiss();
+    }
+  }, [isLoading]);
   return (
     <>
-      <div
-        style={{
-          background: background,
-        }}
-        className=" p-5 rounded-md mb-5"
-      >
-        <h1
-          style={{
-            mixBlendMode: "difference",
-          }}
-          className="text-xl font-semibold"
-        >
-          Event Setup
-        </h1>
-        <p
-          style={{
-            mixBlendMode: "difference",
-          }}
-          className=" text-sm mt-2"
-        >
-          Set up your event type to get started
-        </p>
-      </div>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8  ">
           <FormField
+            disabled={isLoading}
             control={form.control}
             name="title"
             render={({ field }) => (
@@ -125,6 +133,7 @@ const EventTypeEditForm = ({ eventType }: EventTypeEditFormProps) => {
             )}
           />
           <FormField
+            disabled={isLoading}
             control={form.control}
             name="description"
             render={({ field }) => (
@@ -139,6 +148,7 @@ const EventTypeEditForm = ({ eventType }: EventTypeEditFormProps) => {
             )}
           />
           <FormField
+            disabled={isLoading}
             control={form.control}
             name="durationInMinutes"
             render={({ field }) => (
@@ -153,6 +163,7 @@ const EventTypeEditForm = ({ eventType }: EventTypeEditFormProps) => {
             )}
           />
           <FormField
+            disabled={isLoading}
             control={form.control}
             name="link"
             render={({ field }) => (

@@ -1,8 +1,12 @@
 import { db } from "@/lib/db";
+import { custom_middleware } from "@/lib/middleware";
 import { getAuth } from "@clerk/nextjs/server";
-import { NextRequest } from "next/server";
+import { Prisma } from "@prisma/client";
+import { ApiError } from "next/dist/server/api-utils";
+import { headers } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
+async function fetchEventWithId(
   req: NextRequest,
   params: {
     params: {
@@ -11,20 +15,6 @@ export async function GET(
   }
 ) {
   try {
-    const auth = getAuth(req);
-
-    if (!auth) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-      });
-    }
-
-    if (!auth.userId) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-      });
-    }
-
     const eventType = await db.eventType.findUnique({
       where: {
         id: params.params.id,
@@ -32,13 +22,14 @@ export async function GET(
     });
 
     if (!eventType) {
-      throw new Error("Event type not found");
+      throw new ApiError(404, "Event type not found");
     }
 
-    return new Response(JSON.stringify(eventType));
-  } catch (error) {
-    console.log("ERROR", error);
-    return new Response(JSON.stringify(error), { status: 500 });
+    return NextResponse.json(eventType);
+  } catch (error: any) {
+    if (error) {
+      throw new ApiError(error.statusCode, error.message);
+    }
   }
 }
 
@@ -67,8 +58,15 @@ export async function PUT(
 
     const body = await req.json();
 
-    const { active, isDefault, color, description, durationInMinutes, title } =
-      body;
+    const {
+      active,
+      isDefault,
+      color,
+      description,
+      durationInMinutes,
+      title,
+      link,
+    } = body;
 
     const eventType = await db.eventType.update({
       where: {
@@ -81,13 +79,23 @@ export async function PUT(
         description,
         durationInMinutes,
         title,
+        link,
       },
     });
 
     return new Response(JSON.stringify(eventType));
-  } catch (error) {
-    console.log("ERROR", error);
-    return new Response(JSON.stringify(error), { status: 500 });
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      // The .code property can be accessed in a type-safe manner
+      if (e.code === "P2002") {
+        console.log(
+          "There is a unique constraint violation, a new user cannot be created with this email"
+        );
+      }
+    }
+    throw e;
+
+    return new Response(JSON.stringify(e), { status: 500 });
   }
 }
 
@@ -148,3 +156,5 @@ export async function DELETE(
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+export const GET = custom_middleware(fetchEventWithId);

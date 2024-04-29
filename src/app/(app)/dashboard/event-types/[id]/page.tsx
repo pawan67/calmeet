@@ -1,6 +1,8 @@
 import EventTypeFormLayout from "@/components/event-type/layout";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 const EventTypeEdit = async ({
   params,
 }: {
@@ -8,27 +10,7 @@ const EventTypeEdit = async ({
     id: string;
   };
 }) => {
-  const eventType = await db.eventType.findUnique({
-    where: {
-      id: params.id,
-    },
-    select: {
-      id: true,
-      title: true,
-      isDefault: true,
-      active: true,
-      color: true,
-      durationInMinutes: true,
-      link: true,
-      description: true,
-    },
-  });
-
-  if (!eventType) {
-    return <div>Event type not found</div>;
-  }
-
-  return <EventTypeFormLayout eventType={eventType} id={params.id} />;
+  return <EventTypeFormLayout id={params.id} />;
 };
 
 export default EventTypeEdit;
