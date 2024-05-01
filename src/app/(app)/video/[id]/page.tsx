@@ -1,4 +1,4 @@
-import VideoMeetingComponent from "@/components/video/video-meet";
+import { VideoMeetingComponent } from "@/components/video/video-meet";
 import React from "react";
 
 function VideoMeetingPage() {

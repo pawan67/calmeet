@@ -1,62 +1,49 @@
 "use client";
-import {
-  CallControls,
-  CallingState,
-  SpeakerLayout,
-  StreamCall,
-  StreamTheme,
-  StreamVideo,
-  StreamVideoClient,
-  useCall,
-  useCallStateHooks,
-  User,
-} from "@stream-io/video-react-sdk";
+import { tokenProvider } from "@/actions/stream.actions";
+import { useUser } from "@clerk/nextjs";
+import { StreamVideo, StreamVideoClient } from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
+import { useEffect, useState } from "react";
+import FullPageLoader from "../shared/loader";
+const apikey = process.env.NEXT_PUBLIC_STREAM_API_KEY;
 
-const apiKey = "mmhfdzb5evj2"; // the API key can be found in the "Credentials" section
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiWmF5bmVfQ2FycmljayIsImlzcyI6Imh0dHBzOi8vcHJvbnRvLmdldHN0cmVhbS5pbyIsInN1YiI6InVzZXIvWmF5bmVfQ2FycmljayIsImlhdCI6MTcxNDQ3NTIzNywiZXhwIjoxNzE1MDgwMDQyfQ.-M8ihRgi_XXGcPtDVSmX_OuqPqq-KUSQwUYGGugcmqg"; // the token can be found in the "Credentials" section
-const userId = "Zayne_Carrick"; // the user id can be found in the "Credentials" section
-const callId = "4OsD3XEOQpef"; // the call id can be found in the "Credentials" section
+const StreamClientProvider = ({ children }: { children: React.ReactNode }) => {
+  const [videoClient, setVideoClient] = useState<StreamVideoClient | null>(
+    null
+  );
 
-// set up the user object
-const user: User = {
-  id: userId,
-  name: "Oliver",
-  image: "https://getstream.io/random_svg/?id=oliver&name=Oliver",
+  const { user, isLoaded } = useUser();
+
+  useEffect(() => {
+    if (!isLoaded || !user) return;
+    if (!apikey) throw new Error("Stream API key not found");
+
+    const client = new StreamVideoClient({
+      apiKey: apikey,
+      user: {
+        id: user?.id,
+        name: user?.fullName || user?.id,
+        image: user?.imageUrl,
+      },
+      tokenProvider: tokenProvider,
+    });
+
+    setVideoClient(client);
+  }, [user, isLoaded]);
+
+  if (!videoClient) return <FullPageLoader />;
+
+  return <StreamVideo client={videoClient}>{children}</StreamVideo>;
 };
 
-const client = new StreamVideoClient({ apiKey, user, token });
-const call = client.call("default", callId);
-call.join({ create: true });
-
-const VideoMeetingComponent = () => {
+export const VideoMeetingComponent = () => {
   return (
-    <StreamVideo client={client}>
-      <StreamCall call={call}>
-        <MyUILayout />
-      </StreamCall>
-    </StreamVideo>
+    <StreamClientProvider>
+      <div>
+        <h1>Video Meeting</h1>
+      </div>
+    </StreamClientProvider>
   );
 };
 
-export default VideoMeetingComponent;
-
-export const MyUILayout = () => {
-  const call = useCall();
-
-  const { useCallCallingState, useParticipantCount } = useCallStateHooks();
-  const callingState = useCallCallingState();
-  const participantCount = useParticipantCount();
-
-  if (callingState !== CallingState.JOINED) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <StreamTheme>
-      <SpeakerLayout participantsBarPosition="bottom" />
-      <CallControls />
-    </StreamTheme>
-  );
-};
+export default StreamClientProvider;

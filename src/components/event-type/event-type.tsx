@@ -59,6 +59,7 @@ import { Clock9, Pencil } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { EventTypeSkeleton } from "../profile/profile-page";
 
 export const formSchema = z.object({
   title: z.string().min(3),
@@ -66,7 +67,6 @@ export const formSchema = z.object({
   durationInMinutes: z.coerce.number().min(10).max(3600).int().optional(),
   isDefault: z.boolean().default(false),
   active: z.boolean().default(true),
-  link: z.string().optional(),
   description: z.string().optional(),
 });
 const EventTypeComponent = () => {
@@ -94,7 +94,6 @@ const EventTypeComponent = () => {
       description: "",
       durationInMinutes: 15,
       isDefault: false,
-      link: "",
     },
   });
 
@@ -193,26 +192,7 @@ const EventTypeComponent = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="link"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>URL</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
 
-                    <FormDescription className=" line-clamp-1">
-                      {`https://calmeet.vercel.app/${
-                        field.value || "quick-chat"
-                      }`}
-                    </FormDescription>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="description"
@@ -254,7 +234,11 @@ const EventTypeComponent = () => {
       </Dialog>
       <div className=" mt-5 grid ">
         {isLoading ? (
-          "Loading"
+          <div className=" space-y-1">
+            {[1, 2].map((item) => (
+              <EventTypeSkeleton key={item} />
+            ))}
+          </div>
         ) : (
           <>
             {eventTypes.map(

@@ -58,7 +58,6 @@ const EventTypeEditForm = ({ id }: EventTypeEditFormProps) => {
         : 15,
 
       isDefault: eventType?.isDefault ? eventType?.isDefault : false,
-      link: eventType?.link ? eventType?.link : "",
     },
   });
 
@@ -85,7 +84,6 @@ const EventTypeEditForm = ({ id }: EventTypeEditFormProps) => {
         description: eventType.description,
         durationInMinutes: eventType.durationInMinutes,
         isDefault: eventType.isDefault,
-        link: eventType.link,
       });
     }
   }, [eventType]);
@@ -162,21 +160,13 @@ const EventTypeEditForm = ({ id }: EventTypeEditFormProps) => {
               </FormItem>
             )}
           />
-          <FormField
-            disabled={isLoading}
-            control={form.control}
-            name="link"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>URL</FormLabel>
-                <FormControl>
-                  <Input placeholder="URL " {...field} />
-                </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
+          <Input
+            disabled
+            value={`https://calmeet.vercel.app/video/${eventType?.id}`}
+            placeholder="URL "
           />
+
           <FormItem>
             <FormLabel>Theme</FormLabel>
 
