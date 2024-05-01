@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Prisma } from "@prisma/client";
 import { Skeleton } from "../ui/skeleton";
+import Link from "next/link";
 
 const PublicProfileBooking = ({ user }: { user: UserInterface }) => {
   console.log(user);
@@ -48,6 +49,7 @@ const PublicProfileBooking = ({ user }: { user: UserInterface }) => {
                 eventType={item}
                 eventTypes={events}
                 key={item?.id}
+                username={user.username}
               />
             );
           })}
@@ -76,15 +78,17 @@ const EventTypeCard = ({
   index,
   eventTypes,
   eventType,
+  username,
 }: {
   index: number;
   eventTypes: any[];
   eventType: Prisma.EventTypeGetPayload<{
     select: Prisma.EventTypeSelect;
   }>;
+  username: string;
 }) => {
   return (
-    <div>
+    <Link href={`/${username}/${eventType.id}`}>
       <Card
         className={cn(
           ` cursor-pointer  py-4 px-5 rounded-t-none  rounded-b-none bg-primary-foreground flex items-center justify-between`,
@@ -92,7 +96,6 @@ const EventTypeCard = ({
             index == eventTypes.length - 1 && "rounded-b-md"
           }   `
         )}
-        //   key={eventType.id}
       >
         <div>
           <h3 className="  text-sm font-semibold ">{eventType?.title}</h3>
@@ -106,7 +109,7 @@ const EventTypeCard = ({
           </Badge>
         </div>
       </Card>
-    </div>
+    </Link>
   );
 };
 

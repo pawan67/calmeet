@@ -11,3 +11,19 @@ export const getUserEvents = async (userId: string) => {
 
   return events;
 };
+
+export const getEvent = async (eventId: string) => {
+  try {
+    const event = await db.eventType.findUnique({
+      where: {
+        id: eventId,
+      },
+    });
+
+    if (!event) throw new Error("Event not found");
+    return event;
+  } catch (error) {
+    console.error("ERROR AT getEvent", error);
+    throw new Error("Something went wrong");
+  }
+};

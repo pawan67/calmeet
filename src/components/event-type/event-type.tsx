@@ -60,6 +60,8 @@ import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { EventTypeSkeleton } from "../profile/profile-page";
+import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 
 export const formSchema = z.object({
   title: z.string().min(3),
@@ -294,6 +296,8 @@ const EventTypeCard = ({
   const router = useRouter();
   const queryClient = useQueryClient();
 
+  const { user } = useUser();
+
   const { mutate: deleteEventType, isPending } = useMutation({
     mutationKey: ["delete-event-type"],
     mutationFn: async () => {
@@ -335,9 +339,11 @@ const EventTypeCard = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Button className="hidden md:flex" variant="ghost" size="icon">
-                <IconView360 size={16} />
-              </Button>
+              <Link href={`/${user?.username}/${eventType?.id}`}>
+                <Button className="hidden md:flex" variant="ghost" size="icon">
+                  <IconView360 size={16} />
+                </Button>
+              </Link>
             </TooltipTrigger>
             <TooltipContent>
               <p>Preview</p>
