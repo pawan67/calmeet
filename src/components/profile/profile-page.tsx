@@ -24,7 +24,7 @@ const PublicProfileBooking = ({ user }: { user: UserInterface }) => {
   });
 
   return (
-    <div className=" flex  justify-center  ">
+    <div className=" flex container  justify-center  ">
       <div className="  max-w-xl w-full mt-10">
         <div className=" flex items-center justify-center flex-col gap-2 ">
           <Avatar className=" w-20 h-20">
