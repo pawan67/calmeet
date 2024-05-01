@@ -4,11 +4,6 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Providers from "@/components/shared/provider";
 
-const inter = Inter({ subsets: ["latin"] });
-const roboto = Roboto({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-});
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
@@ -24,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className)}>
+      <body >
         <Providers>{children}</Providers>
       </body>
     </html>
