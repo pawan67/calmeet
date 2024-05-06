@@ -83,7 +83,18 @@ const EventTypeCard = ({
   index: number;
   eventTypes: any[];
   eventType: Prisma.EventTypeGetPayload<{
-    select: Prisma.EventTypeSelect;
+    select: {
+      title: boolean;
+      description: boolean;
+      durationInMinutes: boolean;
+      link: boolean;
+
+      color: boolean;
+      active: boolean;
+      id: boolean;
+      authorId: boolean;
+      isDefault: boolean;
+    };
   }>;
   username: string;
 }) => {
