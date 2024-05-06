@@ -25,4 +25,47 @@ model EventType {
   link     String?
   description String?
   authorId String
+  bookings  Booking[] 
+}
+
+model Booking {
+  id        String      @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+  title     String
+  description String?
+  startTime DateTime
+  endTime   DateTime
+
+  // Relating the booking to a Clerk user
+  userId    String?
+
+  // Relating the booking to a calendar event
+  eventId   String?
+  event     EventType?   @relation(fields: [eventId], references: [id])
+
+  // Additional fields for attendees, guests, etc.
+  attendees   Attendee[]
+
+  
+
+  @@index([startTime, endTime])
+}
+
+
+
+
+model Attendee {
+  id        String      @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name      String
+  email     String
+
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+
+  
 }
