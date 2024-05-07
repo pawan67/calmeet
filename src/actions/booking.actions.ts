@@ -70,3 +70,24 @@ export const getAllBookings = async (userId: string) => {
     throw new Error(error.message);
   }
 };
+
+export const getBookingById = async (id: string) => {
+  try {
+    const booking = await db.booking.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        event: true,
+      },
+    });
+
+    if (!booking) {
+      throw new Error("Booking not found");
+    }
+
+    return booking;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};

@@ -26,11 +26,12 @@ import { useUser } from "@clerk/nextjs";
 import Logo from "../shared/logo";
 import { ArrowLeft } from "lucide-react";
 import FullPageLoader from "../shared/loader";
+import { useRouter } from "next/navigation";
 
 function EventBookingComponent({ id }: { id: string }) {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = React.useState("");
-
+  const router = useRouter();
   const { user } = useUser();
   const { data: eventType, isLoading: isEventTypeLoading } = useQuery({
     queryKey: ["event-type", id],
@@ -66,6 +67,8 @@ function EventBookingComponent({ id }: { id: string }) {
     onSuccess: (data) => {
       console.log(data);
       toast.success("Booking created successfully");
+
+      router.push(`/booking/${data.id}`);
     },
 
     onError: (error) => {
