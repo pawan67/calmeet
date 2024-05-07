@@ -11,18 +11,33 @@ import { useQuery } from "@tanstack/react-query";
 import { Prisma } from "@prisma/client";
 import { Skeleton } from "../ui/skeleton";
 import Link from "next/link";
+import { getAuthorById } from "@/actions/user.actions";
+import FullPageLoader from "../shared/loader";
+import { notFound } from "next/navigation";
 
-const PublicProfileBooking = ({ user }: { user: UserInterface }) => {
-  console.log(user);
-
+const PublicProfileBooking = ({ userId }: { userId: string }) => {
+  const {
+    data: user,
+    isLoading: userIsLoading,
+    error,
+  } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: () => getAuthorById(userId),
+  });
   const {
     data: events,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["user-events", user.id],
-    queryFn: () => getUserEvents(user.id),
+    queryKey: ["user-events", userId],
+    queryFn: () => getUserEvents(userId),
   });
+
+  if (error) {
+    return notFound();
+  }
+
+  if (userIsLoading || isLoading) return <FullPageLoader />;
 
   return (
     <div className=" flex container  justify-center  ">
@@ -36,7 +51,7 @@ const PublicProfileBooking = ({ user }: { user: UserInterface }) => {
           </Avatar>
 
           <h2 className=" text-3xl font-semibold">
-            {user.firstName} {user.lastName}
+            {user?.firstName} {user?.lastName}
           </h2>
         </div>
 
@@ -49,7 +64,7 @@ const PublicProfileBooking = ({ user }: { user: UserInterface }) => {
                 eventType={item}
                 eventTypes={events}
                 key={item?.id}
-                username={user.username}
+                username={user.id}
               />
             );
           })}

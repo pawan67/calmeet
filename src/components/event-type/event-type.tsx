@@ -339,7 +339,7 @@ const EventTypeCard = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Link href={`/${user?.username}/${eventType?.id}`}>
+              <Link href={`/${user?.id}/${eventType?.id}`}>
                 <Button className="hidden md:flex" variant="ghost" size="icon">
                   <IconView360 size={16} />
                 </Button>

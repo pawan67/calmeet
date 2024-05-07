@@ -41,7 +41,7 @@ const Navigation = () => {
     {
       name: "Public Profile",
       icon: IconWorld,
-      url: `/${user?.username}`,
+      url: `/${user?.id}`,
     },
 
     {

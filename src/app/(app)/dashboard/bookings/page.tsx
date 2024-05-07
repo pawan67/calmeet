@@ -2,6 +2,7 @@
 
 import { getAllBookings } from "@/actions/booking.actions";
 import { getAuthorById } from "@/actions/user.actions";
+import { EventTypeSkeleton } from "@/components/profile/profile-page";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useUser } from "@clerk/nextjs";
@@ -10,10 +11,11 @@ import { IconRowRemove, IconX } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const BookingsPage = () => {
   const { user } = useUser();
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["bookings"],
     queryFn: async () => getAllBookings(user?.id as string),
   });
@@ -26,6 +28,8 @@ const BookingsPage = () => {
         This is the bookings page. You can view all your bookings here.
       </p>
       <div className=" my-10 space-y-5">
+        {isLoading &&
+          [...Array(3)].map((_, index) => <EventTypeSkeleton key={index} />)}
         {data?.map((booking: Booking) => (
           <BookingItem key={booking.id} booking={booking} />
         ))}
@@ -40,8 +44,14 @@ const BookingItem = ({ booking }: { booking: Booking }) => {
     queryFn: async () => getAuthorById(booking.userId as string),
   });
 
+  const router = useRouter();
+
   return (
-    <Card>
+    <Card
+      onClick={() => {
+        router.push(`/booking/${booking.id}`);
+      }}
+    >
       <CardContent className=" items-center sm:flex justify-between pt-4">
         <div className=" flex space-x-10 ">
           <div className=" min-w-[170px]">
@@ -54,6 +64,9 @@ const BookingItem = ({ booking }: { booking: Booking }) => {
               <span>{moment(booking.endTime).format("LT")}</span>
             </div>
             <Link
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
               href={`/video/${booking.id}`}
               className=" mt-2 text-blue-400 text-sm hover:underline  "
             >
@@ -70,7 +83,12 @@ const BookingItem = ({ booking }: { booking: Booking }) => {
         </div>
 
         <div className=" mt-5 sm:mt-0">
-          <Button variant="outline">
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            variant="outline"
+          >
             <IconX size={20} className=" mr-2" />
             Cancel
           </Button>

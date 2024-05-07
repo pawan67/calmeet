@@ -7,18 +7,10 @@ const UserUserNamePage = async ({
   params,
 }: {
   params: {
-    username: string;
+    userId: string;
   };
 }) => {
-  const users = await clerkClient.users.getUserList();
-  console.log(users);
-  const user = users.find((user) => user.username === params.username);
-
-  if (!user) {
-    notFound();
-  }
-
-  return <PublicProfileBooking user={JSON.parse(JSON.stringify(user))} />;
+  return <PublicProfileBooking userId={params.userId} />;
 };
 
 export default UserUserNamePage;
