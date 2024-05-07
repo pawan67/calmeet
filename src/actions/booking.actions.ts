@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
+import { useAuth } from "@clerk/nextjs";
 
 type Booking = {
   eventId: string;
@@ -39,10 +40,32 @@ export const createBooking = async (booking: Booking) => {
         endTime: endTime,
         title: booking.title,
         userId: booking.userId,
+        host: eventType.authorId,
       },
     });
 
     return newBooking;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+export const getAllBookings = async (userId: string) => {
+  try {
+    if (!userId) {
+      throw new Error("User not found");
+    }
+    const bookings = await db.booking.findMany({
+      where: {
+        host: userId,
+      },
+    });
+
+    if (!bookings) {
+      return [];
+    }
+
+    return bookings;
   } catch (error: any) {
     throw new Error(error.message);
   }

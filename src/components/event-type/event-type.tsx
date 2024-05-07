@@ -236,7 +236,7 @@ const EventTypeComponent = () => {
       </Dialog>
       <div className=" mt-5 grid ">
         {isLoading ? (
-          <div className=" space-y-1">
+          <div className=" space-y-5">
             {[1, 2].map((item) => (
               <EventTypeSkeleton key={item} />
             ))}

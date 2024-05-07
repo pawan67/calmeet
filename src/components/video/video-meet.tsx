@@ -1,7 +1,15 @@
 "use client";
 import { tokenProvider } from "@/actions/stream.actions";
 import { useUser } from "@clerk/nextjs";
-import { StreamVideo, StreamVideoClient } from "@stream-io/video-react-sdk";
+import {
+  Call,
+  CallControls,
+  SpeakerLayout,
+  StreamCall,
+  StreamVideo,
+  StreamVideoClient,
+  useStreamVideoClient,
+} from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import { useEffect, useState } from "react";
 import FullPageLoader from "../shared/loader";
@@ -33,17 +41,15 @@ const StreamClientProvider = ({ children }: { children: React.ReactNode }) => {
 
   if (!videoClient) return <FullPageLoader />;
 
+  console.log("videoClient", videoClient);
+
   return <StreamVideo client={videoClient}>{children}</StreamVideo>;
 };
 
 export const VideoMeetingComponent = () => {
-  return (
-    <StreamClientProvider>
-      <div>
-        <h1>Video Meeting</h1>
-      </div>
-    </StreamClientProvider>
-  );
+  return <div>
+    
+  </div>;
 };
 
 export default StreamClientProvider;

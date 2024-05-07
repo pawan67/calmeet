@@ -24,8 +24,6 @@ const UserItem = () => {
         className=" flex items-center justify-between text-sm px-3 py-2 w-full rounded-md "
       >
         <div className=" mr-4 gap-x-2 flex items-center max-w-[150px]">
-         
-
           <UserButton afterSignOutUrl="/" />
           <span>
             {user?.firstName} {user?.lastName}{" "}

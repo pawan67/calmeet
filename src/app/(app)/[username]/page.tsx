@@ -11,7 +11,7 @@ const UserUserNamePage = async ({
   };
 }) => {
   const users = await clerkClient.users.getUserList();
-
+  console.log(users);
   const user = users.find((user) => user.username === params.username);
 
   if (!user) {

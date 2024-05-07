@@ -45,6 +45,16 @@ function EventBookingComponent({ id }: { id: string }) {
 
   const { mutate } = useMutation({
     mutationFn: async () => {
+      // startime shoudl also include time selected
+
+      const startTIme = new Date(date as Date) + "T" + selectedTime;
+
+      const payload = {
+        eventId: id,
+        startTime: startTIme,
+        userId: user?.id as string,
+        title: eventType?.title as string,
+      };
       return await createBooking({
         eventId: id,
         startTime: date as Date,
@@ -103,24 +113,13 @@ function EventBookingComponent({ id }: { id: string }) {
         ) : (
           <div>
             <div className=" mt-5">
-              <Button
-                onClick={() => {
-                  setDate(undefined);
-                  setSelectedTime("");
-                }}
-                size="sm"
-                variant="secondary"
-              >
-                <ArrowLeft className=" mr-2" size={16} />
-                Back
-              </Button>
-
               <div className=" mt-5">
                 {date && (
                   <div className=" ">
                     <h3 className=" font-semibold">When</h3>
                     <p className=" text-sm ">
-                      {date.toDateString()}, {selectedTime}
+                      {date.toDateString()}, {selectedTime} for{" "}
+                      {eventType?.durationInMinutes} mins
                     </p>
                   </div>
                 )}
@@ -130,21 +129,42 @@ function EventBookingComponent({ id }: { id: string }) {
                   <p className=" text-sm">Calmeet Video</p>
                 </div>
                 <div className=" mt-5">
-                  <h3 className=" font-semibold">Author </h3>
+                  <h3 className=" font-semibold">Host </h3>
                   <p className=" text-sm">
                     {author?.firstName} {author?.lastName}
+                    <span className=" text-xs text-muted-foreground">
+                      {" "}
+                      ({author?.emailAddresses[0].emailAddress})
+                    </span>
                   </p>
                 </div>
                 <div className=" mt-5">
                   <h3 className=" font-semibold">Attendee </h3>
                   <p className=" text-sm">
                     {user?.firstName} {user?.lastName}
+                    <span className=" text-xs text-muted-foreground">
+                      {" "}
+                      ({user?.emailAddresses[0].emailAddress})
+                    </span>
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className=" mt-6">
+            <p className=" my-5 text-xs text-muted-foreground">
+              By proceeding, you agree to our Terms and Privacy Policy.
+            </p>
+            <div className=" w-[50%] float-right flex items-center gap-3 mt-6">
+              <Button
+                className=" w-full"
+                onClick={() => {
+                  setDate(undefined);
+                  setSelectedTime("");
+                }}
+                variant="ghost"
+              >
+                Back
+              </Button>
               <Button
                 className=" w-full"
                 onClick={() => {

@@ -3,16 +3,20 @@ import {
   IconCirclesRelation,
   IconClockHour4,
   IconDots,
+  IconSettings,
   IconTimeDuration0,
   IconUserCircle,
+  IconWorld,
 } from "@tabler/icons-react";
 import UserItem from "./user-item";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { ModeToggle } from "@/components/shared/mode-toggle";
 import Link from "next/link";
+import { UserProfile, useUser } from "@clerk/nextjs";
 
 const Navigation = () => {
+  const { user } = useUser();
   const navOptions = [
     {
       name: "Events Types",
@@ -29,6 +33,16 @@ const Navigation = () => {
       icon: IconClockHour4,
       url: "/dashboard/availability",
     },
+    {
+      name: "Settings",
+      icon: IconSettings,
+      url: `/dashboard/settings`,
+    },
+    {
+      name: "Public Profile",
+      icon: IconWorld,
+      url: `/${user?.username}`,
+    },
 
     {
       name: "More",
@@ -41,9 +55,8 @@ const Navigation = () => {
   const pathname = usePathname();
   return (
     <>
-      <div className=" fixed left-0 top-0 bottom-0 width-[230px] bg-secondary/40 backdrop-blur-md hidden md:block border-r px-4 py-4  h-screen">
-        <UserItem />
-        <div className=" space-y-1 mt-5">
+      <div className=" fixed left-0 w-[230px] top-0 bottom-0  bg-secondary/40 backdrop-blur-md hidden md:block border-r px-4 py-4  h-screen">
+        <div className="  space-y-3 mt-5">
           {navOptions.map((option, index) => {
             if (option.onlyForMobile) return null;
             return (
@@ -86,10 +99,6 @@ const Navigation = () => {
       <header className=" bg-secondary/40 backdrop-blur-md  flex md:hidden items-center justify-between  p-2 px-4 border-b fixed top-0 inset-x-0">
         <div>
           <img src="/images/logo.png" alt="logo" className=" w-8" />
-        </div>
-
-        <div>
-          <UserItem />
         </div>
       </header>
     </>

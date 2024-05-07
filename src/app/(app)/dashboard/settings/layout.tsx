@@ -1,10 +1,5 @@
 const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div>
-      Settings Layout
-      {children}
-    </div>
-  );
+  return <div>{children}</div>;
 };
 
 export default SettingsLayout;

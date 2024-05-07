@@ -66,7 +66,6 @@ export const EventTypeSkeleton = () => {
         <div>
           <Skeleton className=" h-4 w-20" />
           <Skeleton className=" h-4  w-60 mt-1" />
-          <Skeleton className=" h-4  w-64 mt-1" />
           <Skeleton className=" h-4 w-10 mt-2" />
         </div>
       </Card>
