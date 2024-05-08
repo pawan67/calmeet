@@ -10,6 +10,7 @@ import { EventTypeSkeleton } from "@/components/profile/profile-page";
 import CustomAlert from "@/components/shared/custom-alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { useUser } from "@clerk/nextjs";
 import { Booking, Prisma } from "@prisma/client";
 import { IconDoorEnter, IconRowRemove, IconX } from "@tabler/icons-react";
@@ -18,24 +19,67 @@ import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
+import { DateRange } from "react-day-picker";
+import NoData from "@/components/shared/no-data";
 
 const BookingsPage = () => {
+  const [dateRange, setDateRange] = useState<DateRange>();
+  const [selectedStatus, setSelectedStatus] = useState<
+    "PENDING" | "CONFIRMED" | "CANCELLED" | "ENDED"
+  >("PENDING");
   const { user } = useUser();
   const { data, isLoading } = useQuery({
-    queryKey: ["bookings"],
-    queryFn: async () => getAllBookings(user?.id as string),
+    queryKey: ["bookings", selectedStatus, dateRange],
+    queryFn: async () =>
+      getAllBookings(user?.id as string, selectedStatus, dateRange),
   });
 
   return (
     <div>
-      <h1 className=" text-xl font-semibold ">Bookings Page</h1>
-
       <p className=" text-muted-foreground">
         This is the bookings page. You can view all your bookings here.
       </p>
+
+      <div className=" flex gap-5  items-center  mt-5">
+        <Select
+          onValueChange={(e) =>
+            setSelectedStatus(
+              e as "PENDING" | "CONFIRMED" | "CANCELLED" | "ENDED"
+            )
+          }
+        >
+          <SelectTrigger className="w-[180px] h-11">
+            <SelectValue placeholder="Pending  " />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="CANCELLED">Cancelled</SelectItem>
+            <SelectItem value="CONFIRMED">Confirmed</SelectItem>
+            <SelectItem value="PENDING">Pending</SelectItem>
+            <SelectItem value="ENDED">Ended</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <DateRangePicker
+          onUpdate={(values) => setDateRange(values.range)}
+          align="start"
+          locale="en-GB"
+          showCompare={false}
+        />
+      </div>
+
       <div className=" my-10 space-y-5">
         {isLoading &&
           [...Array(3)].map((_, index) => <EventTypeSkeleton key={index} />)}
+
+        {data?.length === 0 && <NoData message="No Bookings found" />}
         {data?.map((booking: Booking) => (
           <BookingItem key={booking.id} booking={booking} />
         ))}

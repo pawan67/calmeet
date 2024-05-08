@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { useAuth } from "@clerk/nextjs";
 import { getAuthorById } from "./user.actions";
 import sendEmail from "@/lib/utils/sendEmail";
+import { DateRange } from "react-day-picker";
 
 type Booking = {
   eventId: string;
@@ -72,14 +73,27 @@ export const createBooking = async (booking: Booking) => {
   }
 };
 
-export const getAllBookings = async (userId: string) => {
+export const getAllBookings = async (
+  userId: string,
+  status: string,
+  dateRange?: DateRange
+) => {
   try {
     if (!userId) {
       throw new Error("User not found");
     }
+
     const bookings = await db.booking.findMany({
       where: {
-        host: userId,
+        userId: userId,
+        status: status,
+        startTime: {
+          gte: dateRange?.from,
+          lte: dateRange?.to,
+        },
+      },
+      include: {
+        event: true,
       },
     });
 

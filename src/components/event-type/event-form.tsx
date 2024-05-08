@@ -161,11 +161,26 @@ const EventTypeEditForm = ({ id }: EventTypeEditFormProps) => {
             )}
           />
 
-          <Input
-            disabled
-            value={`https://calmeet.vercel.app/video/${eventType?.id}`}
-            placeholder="URL "
-          />
+          <div className=" flex items-center gap-4">
+            <Input
+              disabled
+              value={`https://calmeet.vercel.app/video/${eventType?.id}`}
+              placeholder="URL "
+            />
+
+            <Button
+              variant="secondary"
+              type="button"
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `https://calmeet.vercel.app/video/${eventType?.id}`
+                );
+                toast.success("URL copied to clipboard!");
+              }}
+            >
+              Copy URL
+            </Button>
+          </div>
 
           <FormItem>
             <FormLabel>Theme</FormLabel>

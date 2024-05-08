@@ -49,27 +49,16 @@ const EventTypeFormLayout = ({ id }: { id: string }) => {
       <div className=" flex items-center  gap-2">
         <Button
           onClick={() => router.push("/dashboard/event-types")}
-          variant="ghost"
-          className="w-8 h-8 rounded-full "
-          size={"icon"}
+          variant="secondary"
+          className=" "
+          size="default"
         >
-          <IconArrowLeft size={16} />
+          <IconArrowLeft className=" mr-2" size={16} />
+          Go back
         </Button>
-        <span className=" font-semibold">Go back</span>
       </div>
 
-      <div className=" md:absolute  flex items-center overflow-x-auto md:grid gap-1 mt-7">
-        {navLinks.map((navLink) => (
-          <NavTabs
-            id={id}
-            key={navLink.tabName}
-            navLink={navLink}
-            tabName={tabName}
-          />
-        ))}
-      </div>
-
-      <div className="mt-5 md:ml-[280px] ">
+      <div className="mt-5  ">
         <EventTypeEditForm id={id} />
       </div>
     </div>

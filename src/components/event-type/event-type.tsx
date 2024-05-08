@@ -62,6 +62,7 @@ import { useRouter } from "next/navigation";
 import { EventTypeSkeleton } from "../profile/profile-page";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
+import NoData from "../shared/no-data";
 
 export const formSchema = z.object({
   title: z.string().min(3),
@@ -235,6 +236,9 @@ const EventTypeComponent = () => {
         </DialogContent>
       </Dialog>
       <div className=" mt-5 grid ">
+        {eventTypes?.length === 0 && (
+          <NoData message="No Event Types found, please create one" />
+        )}
         {isLoading ? (
           <div className=" space-y-5">
             {[1, 2].map((item) => (
@@ -288,7 +292,7 @@ const EventTypeCard = ({
 }) => {
   const copyLinkToClipboard = () => {
     navigator.clipboard.writeText(
-      `https://calmeet.vercel.app/${eventType.link}`
+      `https://calmeet.vercel.app/event-book/${eventType?.id}`
     );
     toast.success("Link copied to clipboard.");
   };
@@ -384,8 +388,23 @@ const EventTypeCard = ({
             >
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem>Duplicate</DropdownMenuItem>
             <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className=" md:hidden "
+              onClick={() => {
+                router.push(`/event-book/${eventType.id}`);
+              }}
+            >
+              Go to event
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className=" md:hidden "
+              onClick={() => {
+                copyLinkToClipboard();
+              }}
+            >
+              Copy link
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 deleteEventType();
