@@ -2,6 +2,8 @@
 
 import { db } from "@/lib/db";
 import { useAuth } from "@clerk/nextjs";
+import { getAuthorById } from "./user.actions";
+import sendEmail from "@/lib/utils/sendEmail";
 
 type Booking = {
   eventId: string;
@@ -42,6 +44,27 @@ export const createBooking = async (booking: Booking) => {
         userId: booking.userId,
         host: eventType.authorId,
       },
+    });
+
+    const hostUser = await getAuthorById(eventType.authorId);
+    const attendeeUser = await getAuthorById(booking.userId);
+    console.log("hostUser", hostUser.emailAddresses[0].emailAddress);
+    await sendEmail({
+      to: [
+        hostUser.emailAddresses[0].emailAddress,
+        attendeeUser.emailAddresses[0].emailAddress,
+      ],
+      subject: "New booking",
+      html: `<p>Hi ${hostUser.firstName},</p>
+      <p>${attendeeUser.firstName} has booked an event with you.</p>
+      <p>Event: ${eventType.title}</p>
+      <p>Start time: ${booking.startTime}</p>
+      <p>Title: ${booking.title}</p>
+      <p>Attendee: ${attendeeUser.firstName} ${attendeeUser.lastName}</p>
+      <p>Email: ${attendeeUser.emailAddresses[0].emailAddress}</p>
+
+      <p>Best regards,</p>
+      <p>Calmeet</p>`,
     });
 
     return newBooking;
