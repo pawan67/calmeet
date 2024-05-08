@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Calendar } from "../ui/calendar";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getAuthorById } from "@/actions/user.actions";
@@ -27,9 +27,12 @@ import Logo from "../shared/logo";
 import { ArrowLeft } from "lucide-react";
 import FullPageLoader from "../shared/loader";
 import { useRouter } from "next/navigation";
+import { Input } from "../ui/input";
+import { Value } from "@radix-ui/react-select";
 
 function EventBookingComponent({ id }: { id: string }) {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [title, setTitle] = React.useState("");
   const [selectedTime, setSelectedTime] = React.useState("");
   const router = useRouter();
   const { user } = useUser();
@@ -38,13 +41,20 @@ function EventBookingComponent({ id }: { id: string }) {
     queryFn: () => getEvent(id),
   });
 
+  useEffect(() => {
+    if (!eventType) return;
+    setTitle(
+      `Quick ${eventType.durationInMinutes} mins meet for ${eventType.title}`
+    );
+  }, [eventType]);
+
   const { data: author, isLoading: isAuthorLoading } = useQuery({
     queryKey: ["author", eventType?.authorId],
     queryFn: () => getAuthorById(eventType?.authorId as string),
     enabled: !!eventType,
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       // startime shoudl also include time selected
 
@@ -52,16 +62,11 @@ function EventBookingComponent({ id }: { id: string }) {
 
       const payload = {
         eventId: id,
-        startTime: startTIme,
-        userId: user?.id as string,
-        title: eventType?.title as string,
-      };
-      return await createBooking({
-        eventId: id,
         startTime: date as Date,
         userId: user?.id as string,
-        title: eventType?.title as string,
-      });
+        title: title,
+      };
+      return await createBooking(payload);
     },
 
     onSuccess: (data) => {
@@ -117,8 +122,17 @@ function EventBookingComponent({ id }: { id: string }) {
           <div>
             <div className=" mt-5">
               <div className=" mt-5">
+                <div className=" mt-5">
+                  <h4 className=" font-semibold">Title</h4>
+
+                  <Input
+                    onChange={(e) => setTitle(e.target.value)}
+                    className=" mt-3"
+                    value={title}
+                  />
+                </div>
                 {date && (
-                  <div className=" ">
+                  <div className=" mt-5 ">
                     <h3 className=" font-semibold">When</h3>
                     <p className=" text-sm ">
                       {date.toDateString()}, {selectedTime} for{" "}
@@ -173,8 +187,9 @@ function EventBookingComponent({ id }: { id: string }) {
                 onClick={() => {
                   mutate();
                 }}
+                disabled={isPending}
               >
-                Book
+                {isPending ? "Booking..." : " Book"}
               </Button>
             </div>
           </div>

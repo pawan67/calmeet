@@ -20,7 +20,7 @@ export const getEvent = async (eventId: string) => {
       },
     });
 
-    if (!event) throw new Error("Event not found");
+    if (!event) return null;
     return event;
   } catch (error) {
     console.error("ERROR AT getEvent", error);
