@@ -141,9 +141,10 @@ const BookingItem = ({ booking }: { booking: Booking }) => {
               </Button>
             </CustomAlert>
             <CustomAlert
+              description="Are you sure you want to delete this booking? This action cannot be undone."
               onAction={(e: any) => {
                 e.stopPropagation();
-                cancel();
+                deleteBooking();
               }}
             >
               <Button size="sm" variant="destructive">

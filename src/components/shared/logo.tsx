@@ -4,9 +4,11 @@ import Link from "next/link";
 const Logo = ({
   size = "md",
   className,
+  rounded = false,
 }: {
   size?: "sm" | "md" | "lg";
   className?: string;
+  rounded?: boolean;
 }) => {
   const imgSize = size === "sm" ? 8 : size === "md" ? 12 : 16;
   return (
@@ -14,7 +16,10 @@ const Logo = ({
       <img
         src="/images/logo.png"
         alt="logo"
-        className={cn(className, `w-${imgSize} h-${imgSize}  `)}
+        className={cn(
+          className,
+          `w-${imgSize} h-${imgSize} ${rounded && " rounded-full"}  `
+        )}
       />
     </Link>
   );

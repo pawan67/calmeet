@@ -3,6 +3,8 @@
 import { getBookingById } from "@/actions/booking.actions";
 import { getEvent } from "@/actions/event.actions";
 import { getAuthorById } from "@/actions/user.actions";
+import FullPageLoader from "@/components/shared/loader";
+import Logo from "@/components/shared/logo";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -30,20 +32,23 @@ const BookingPage = ({
     id: string;
   };
 }) => {
-  const { data } = useQuery({
+  const { data, isLoading: isBookingLoading } = useQuery({
     queryKey: ["booking", params.id],
     queryFn: async () => getBookingById(params.id),
   });
-  const { data: hostData } = useQuery({
+  const { data: hostData, isLoading: isHostDataLoading } = useQuery({
     queryKey: ["host", data?.host],
     queryFn: async () => getAuthorById(data?.host as string),
     enabled: !!data,
   });
-  const { data: attendeeData } = useQuery({
+  const { data: attendeeData, isLoading: isAttendeeDataLoading } = useQuery({
     queryKey: ["attendee", data?.userId],
     queryFn: async () => getAuthorById(data?.userId as string),
     enabled: !!data,
   });
+
+  if (isBookingLoading || isHostDataLoading || isAttendeeDataLoading)
+    return <FullPageLoader />;
 
   return (
     <div className=" container flex items-center justify-center">
@@ -60,6 +65,9 @@ const BookingPage = ({
         </CardHeader>
 
         <CardContent className=" mt-5">
+          <div className=" flex items-center gap-2 text-muted-foreground mb-5 font-semibold">
+            <Logo size="sm" />
+          </div>
           <div>
             <h4 className=" font-semibold">Note</h4>
             <p className="  mt-2  ">{data?.note}</p>
@@ -136,6 +144,12 @@ const BookingPage = ({
               email and calendar notifications about this booking.
             </AlertDescription>
           </Alert>
+
+          <div className=" mt-5 text-muted-foreground text-sm flex  items-center  space-x-2 ">
+            <p>Powered by Calmeet</p>
+
+            <Logo size="sm" />
+          </div>
         </CardFooter>
       </Card>
     </div>

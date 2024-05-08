@@ -77,14 +77,15 @@ export function FormPanel({ eventType }: { eventType: EventType }) {
   if (!isLoaded && !user) return null;
 
   return (
-    <form className="flex flex-col gap-5 w-[360px]">
+    <form className="flex flex-col gap-5  md:w-[360px]">
       <div className="flex flex-col space-y-1.5">
         <Label htmlFor="name">Your name *</Label>
-        <Input id="name" defaultValue={user?.fullName as string} />
+        <Input disabled id="name" defaultValue={user?.fullName as string} />
       </div>
       <div className="flex flex-col space-y-1.5">
         <Label htmlFor="email">Email address *</Label>
         <Input
+          disabled
           id="email"
           type="email"
           defaultValue={user?.emailAddresses[0].emailAddress as string}
@@ -94,6 +95,7 @@ export function FormPanel({ eventType }: { eventType: EventType }) {
       <div className="flex flex-col space-y-1.5">
         <Label htmlFor="email">Additional notes</Label>
         <Textarea
+          onChange={(e) => setNote(e.target.value)}
           id="notes"
           placeholder="Please share anything that will help prepare for our meeting"
         />
@@ -127,7 +129,7 @@ export function FormPanel({ eventType }: { eventType: EventType }) {
           </div>
         </>
       )}
-      <Button
+      {/* <Button
         type="button"
         variant="ghost"
         onClick={() => addGuest()}
@@ -135,7 +137,7 @@ export function FormPanel({ eventType }: { eventType: EventType }) {
       >
         <UserPlus className="mr-2 size-4" />
         Add guests
-      </Button>
+      </Button> */}
       <p className="text-gray-11 text-xs my-4">
         By proceeding, you agree to our{" "}
         <span className="text-gray-12">Terms</span> and{" "}

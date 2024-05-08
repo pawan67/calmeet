@@ -78,7 +78,7 @@ export function Demo({ eventType }: { eventType: EventType }) {
   const showForm = !!dateParam && !!slotParam;
 
   return (
-    <div className="w-full bg-gray-1 md:mt-20  px-8 py-6 rounded-lg max-w-max mx-auto">
+    <div className="w-full  md:mt-20  px-8 py-6 rounded-lg max-w-max mx-auto">
       <div className=" md:flex gap-6">
         <LeftPanel
           showForm={showForm}
@@ -86,6 +86,7 @@ export function Demo({ eventType }: { eventType: EventType }) {
           setTimeZone={setTimeZone}
           title={eventType.title}
           durationInMinutes={eventType.durationInMinutes}
+          description={eventType.description}
         />
 
         {!showForm ? (

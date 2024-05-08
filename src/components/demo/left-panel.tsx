@@ -15,6 +15,7 @@ import { useLocale } from "@react-aria/i18n";
 import { CalendarIcon, Clock4 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { timeZones } from "./time-zones";
+import Logo from "../shared/logo";
 
 export function LeftPanel({
   showForm,
@@ -22,12 +23,14 @@ export function LeftPanel({
   setTimeZone,
   title,
   durationInMinutes,
+  description
 }: {
   showForm: boolean | null;
   timeZone: string;
   setTimeZone: (timeZone: string) => void;
   title: string;
   durationInMinutes: number | null;
+  description : string| null;
 }) {
   const { locale } = useLocale();
 
@@ -40,13 +43,7 @@ export function LeftPanel({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <img
-                alt="Calmeet"
-                src="/images/logo.png"
-                className="rounded-full border"
-                width={24}
-                height={24}
-              />
+              <Logo size="sm" />
             </TooltipTrigger>
             <TooltipContent>Calmeet</TooltipContent>
           </Tooltip>
@@ -55,6 +52,7 @@ export function LeftPanel({
       </div>
       <div className="grid gap-3">
         <p className="text-gray-12 text-2xl font-bold">{title}</p>
+        <p className=" text-muted-foreground text-sm ">{description}</p>
 
         {showForm && (
           <div className="flex text-gray-12">

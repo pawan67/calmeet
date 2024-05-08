@@ -69,6 +69,18 @@ const PublicProfileBooking = ({ userId }: { userId: string }) => {
             );
           })}
         </div>
+
+        <div className="  text-center mt-10 text-sm text-muted-foreground">
+          <Link
+            className=" hover:underline"
+            target="_blank"
+            rel="norferrer"
+            href="/"
+          >
+            CalMeet: A Meeting Scheduling Tool
+          </Link>
+          <p className=" ml-2">Copyright © 2024 CalMeet All Rights Reserved.</p>
+        </div>
       </div>
     </div>
   );
