@@ -75,7 +75,7 @@ const BookingItem = ({ booking }: { booking: Booking }) => {
           </div>
 
           <div>
-            <p className="  ">{booking.title}</p>
+            <p className="  ">{booking.note}</p>
             <p className=" text-sm">
               You and {data?.firstName} {data?.lastName}
             </p>

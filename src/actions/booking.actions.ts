@@ -113,3 +113,34 @@ export const getBookingById = async (id: string) => {
     throw new Error(error.message);
   }
 };
+
+export const changeStatusOfBooking = async (id: string, status: string) => {
+  try {
+    const booking = await db.booking.update({
+      where: {
+        id: id,
+      },
+      data: {
+        status: status,
+      },
+    });
+
+    return booking;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+export const deleteBooking = async (id: string) => {
+  try {
+    const booking = await db.booking.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return booking;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};

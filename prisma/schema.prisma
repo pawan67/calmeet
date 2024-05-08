@@ -47,6 +47,9 @@ model Booking {
   // Additional fields for attendees, guests, etc.
   attendees Attendee[]
 
+  // Enum for the status of the booking
+  status String @default("PENDING") // PENDING, CONFIRMED, CANCELLED, ENDED
+
   host String?
 
   @@index([startTime, endTime])
