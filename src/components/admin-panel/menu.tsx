@@ -114,6 +114,8 @@ export function Menu({ isOpen }: MenuProps) {
                   <Link
                     className="w-full justify-start h-10 mt-4"
                     href={`/${userId}`}
+                    target="_blank"
+                    rel="noreferrer"
                   >
                     <Button className=" w-full justify-start" variant="ghost">
                       <span className={cn(isOpen === false ? "" : "mr-4")}>

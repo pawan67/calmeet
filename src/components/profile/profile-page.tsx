@@ -124,6 +124,7 @@ const EventTypeCard = ({
   }>;
   username: string;
 }) => {
+  
   return (
     <Link href={`/event-book/${eventType.id}`}>
       <Card
