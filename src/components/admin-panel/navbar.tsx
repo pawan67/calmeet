@@ -12,8 +12,6 @@ export function Navbar() {
           <PageTitle />
         </div>
         <div className="flex flex-1 items-center space-x-2 justify-end">
-          <ModeToggle />
-
           <UserNav />
         </div>
       </div>
