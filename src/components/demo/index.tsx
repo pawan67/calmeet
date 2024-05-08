@@ -17,7 +17,7 @@ import { LeftPanel } from "./left-panel";
 import { RightPanel } from "./right-panel";
 import { EventType } from "@prisma/client";
 
-export function Demo({ eventType }: { eventType: EventType  }) {
+export function Demo({ eventType }: { eventType: EventType }) {
   const router = useRouter();
   const { locale } = useLocale();
 
@@ -86,6 +86,7 @@ export function Demo({ eventType }: { eventType: EventType  }) {
           setTimeZone={setTimeZone}
           title={eventType.title}
           durationInMinutes={eventType.durationInMinutes}
+          
         />
 
         {!showForm ? (
@@ -102,7 +103,7 @@ export function Demo({ eventType }: { eventType: EventType  }) {
             />
           </>
         ) : (
-          <FormPanel />
+          <FormPanel eventType={eventType} />
         )}
       </div>
     </div>

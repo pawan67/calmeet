@@ -9,9 +9,10 @@ type Booking = {
   eventId: string;
   startTime: Date;
   userId: string;
-  title: string;
+  note: string;
 };
 export const createBooking = async (booking: Booking) => {
+  console.log(booking);
   try {
     const eventType = await db.eventType.findUnique({
       where: {
@@ -23,12 +24,10 @@ export const createBooking = async (booking: Booking) => {
       throw new Error("Event not found");
     }
 
-    let endTime;
+    let endTime = new Date(booking.startTime);
 
     if (eventType.durationInMinutes) {
-      endTime = new Date(
-        booking.startTime.getTime() + eventType.durationInMinutes * 60000
-      );
+      endTime.setMinutes(endTime.getMinutes() + eventType.durationInMinutes);
     }
 
     if (!endTime) {
@@ -40,7 +39,7 @@ export const createBooking = async (booking: Booking) => {
         eventId: booking.eventId,
         startTime: booking.startTime,
         endTime: endTime,
-        title: booking.title,
+        note: booking.note,
         userId: booking.userId,
         host: eventType.authorId,
       },
@@ -59,7 +58,7 @@ export const createBooking = async (booking: Booking) => {
       <p>${attendeeUser.firstName} has booked an event with you.</p>
       <p>Event: ${eventType.title}</p>
       <p>Start time: ${booking.startTime}</p>
-      <p>Title: ${booking.title}</p>
+      <p>Note: ${booking.note}</p>
       <p>Attendee: ${attendeeUser.firstName} ${attendeeUser.lastName}</p>
       <p>Email: ${attendeeUser.emailAddresses[0].emailAddress}</p>
 

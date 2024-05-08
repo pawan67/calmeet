@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { UserPlus, X } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PhoneInput } from "../phone-input";
 
 import * as React from "react";
@@ -16,12 +16,19 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { useUser } from "@clerk/nextjs";
+import { useMutation } from "@tanstack/react-query";
+import { createBooking } from "@/actions/booking.actions";
+import { toast } from "sonner";
+import { EventType } from "@prisma/client";
 
 type Guest = {
   email: string;
 };
 
-export function FormPanel() {
+export function FormPanel({ eventType }: { eventType: EventType }) {
+  const { user, isLoaded } = useUser();
+  const [note, setNote] = React.useState("");
   const router = useRouter();
 
   const [guests, setGuests] = React.useState<Guest[]>([]);
@@ -39,21 +46,51 @@ export function FormPanel() {
   };
 
   const hasGuests = guests.length > 0;
+  const searchParams = useSearchParams();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      // startime shoudl also include time selected
+
+      const payload = {
+        eventId: eventType.id,
+        startTime: searchParams.get("slot") as unknown as Date,
+        userId: user?.id as string,
+        note: note,
+      };
+      return await createBooking(payload);
+    },
+
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success("Booking created successfully");
+
+      router.push(`/booking/${data.id}`);
+    },
+
+    onError: (error) => {
+      console.log(error);
+      toast.error(error.message);
+    },
+  });
+
+  if (!isLoaded && !user) return null;
 
   return (
     <form className="flex flex-col gap-5 w-[360px]">
       <div className="flex flex-col space-y-1.5">
         <Label htmlFor="name">Your name *</Label>
-        <Input id="name" defaultValue="Damián Ricobelli" />
+        <Input id="name" defaultValue={user?.fullName as string} />
       </div>
       <div className="flex flex-col space-y-1.5">
         <Label htmlFor="email">Email address *</Label>
-        <Input id="email" type="email" defaultValue="dricobelli@gmail.com" />
+        <Input
+          id="email"
+          type="email"
+          defaultValue={user?.emailAddresses[0].emailAddress as string}
+        />
       </div>
-      <div className="flex flex-col space-y-1.5">
-        <Label htmlFor="phone">Phone number *</Label>
-        <PhoneInput id="phone" />
-      </div>
+
       <div className="flex flex-col space-y-1.5">
         <Label htmlFor="email">Additional notes</Label>
         <Textarea
@@ -113,10 +150,8 @@ export function FormPanel() {
         >
           Back
         </Button>
-        <Button asChild type="button">
-          <Link href="https://github.com/damianricobelli/shadcn-cal-com">
-            Continue
-          </Link>
+        <Button disabled={isPending} onClick={() => mutate()} type="button">
+          {isPending ? "Booking..." : "Book"}
         </Button>
       </div>
     </form>

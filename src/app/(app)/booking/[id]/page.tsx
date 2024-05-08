@@ -61,8 +61,8 @@ const BookingPage = ({
 
         <CardContent className=" mt-5">
           <div>
-            <h4 className=" font-semibold">What</h4>
-            <p className="  mt-2  ">{data?.title}</p>
+            <h4 className=" font-semibold">Note</h4>
+            <p className="  mt-2  ">{data?.note}</p>
           </div>
           <div className=" mt-5">
             <h4 className=" font-semibold">When</h4>

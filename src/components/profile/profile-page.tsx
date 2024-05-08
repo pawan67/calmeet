@@ -113,7 +113,7 @@ const EventTypeCard = ({
   username: string;
 }) => {
   return (
-    <Link href={`/${username}/${eventType.id}`}>
+    <Link href={`/event-book/${eventType.id}`}>
       <Card
         className={cn(
           ` cursor-pointer  py-4 px-5 rounded-t-none  rounded-b-none bg-primary-foreground flex items-center justify-between`,
