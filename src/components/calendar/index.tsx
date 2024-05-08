@@ -18,10 +18,11 @@ export function Calendar(props: CalendarProps<DateValue>) {
     visibleDuration: { months: 1 },
     locale,
     createCalendar,
+
   });
 
   const { calendarProps, prevButtonProps, nextButtonProps } = useCalendar(
-    props,
+    {...props, },
     state
   );
 

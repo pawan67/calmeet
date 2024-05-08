@@ -21,13 +21,11 @@ export function Sidebar() {
     >
       <SidebarToggle isOpen={sidebar?.isOpen} setIsOpen={sidebar?.setIsOpen} />
       <div className="relative h-full flex flex-col px-3 py-4 overflow-y-auto  border-r ">
-        <Button
+        <div
           className={cn(
-            "transition-transform ease-in-out justify-start duration-300 ",
+            "transition-transform px-2 ease-in-out justify-start duration-300 ",
             sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0"
           )}
-          variant="link"
-          asChild
         >
           <Link href="/dashboard" className="flex items-center  gap-2">
             <Logo size="sm" className="w-6 h-6 mr-1" />
@@ -42,7 +40,7 @@ export function Sidebar() {
               Calmeet
             </h1>
           </Link>
-        </Button>
+        </div>
         <Menu isOpen={sidebar?.isOpen} />
       </div>
     </aside>

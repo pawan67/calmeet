@@ -10,6 +10,7 @@ import {
   Timer,
   Globe,
   SquareArrowOutUpRight,
+  SwatchBook,
 } from "lucide-react";
 
 type Submenu = {
@@ -62,10 +63,10 @@ export function getPages(pathname: string): Group[] {
       groupLabel: "Settings",
       menus: [
         {
-          href: "/users",
-          label: "Users",
-          active: pathname.includes("/users"),
-          icon: Users,
+          href: "/dashboard/appearance",
+          label: "Appearance",
+          active: pathname.includes("/dashboard/appearance"),
+          icon: SwatchBook,
           submenus: [],
         },
         {
@@ -75,7 +76,6 @@ export function getPages(pathname: string): Group[] {
           icon: Settings,
           submenus: [],
         },
-       
       ],
     },
   ];

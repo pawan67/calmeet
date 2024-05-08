@@ -55,6 +55,9 @@ model Booking {
   @@index([startTime, endTime])
 }
 
+
+
+
 model Attendee {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())

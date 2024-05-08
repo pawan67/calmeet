@@ -44,7 +44,7 @@ const PublicProfileBooking = ({ userId }: { userId: string }) => {
       <div className="  max-w-xl w-full mt-10">
         <div className=" flex items-center justify-center flex-col gap-2 ">
           <Avatar className=" w-20 h-20">
-            <AvatarImage src={user.imageUrl} />
+            <AvatarImage className=" object-cover" src={user.imageUrl} />
             <AvatarFallback>
               {user.firstName[0]} {user.lastName[0]}
             </AvatarFallback>
@@ -129,7 +129,7 @@ const EventTypeCard = ({
     <Link href={`/event-book/${eventType.id}`}>
       <Card
         className={cn(
-          ` cursor-pointer  py-4 px-5 rounded-t-none  rounded-b-none bg-primary-foreground flex items-center justify-between`,
+          ` cursor-pointer  py-4 px-5 rounded-t-none  rounded-b-none bg-secondary/20 flex items-center justify-between`,
           ` ${index == 0 && "rounded-t-md"} ${
             index == eventTypes.length - 1 && "rounded-b-md"
           }   `

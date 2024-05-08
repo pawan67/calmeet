@@ -320,7 +320,7 @@ const EventTypeCard = ({
   return (
     <Card
       className={cn(
-        `  py-4 px-5 rounded-t-none rounded-b-none bg-primary-foreground flex items-center justify-between`,
+        `  py-4 px-5 rounded-t-none rounded-b-none bg-secondary/20 flex items-center justify-between`,
         ` ${index == 0 && "rounded-t-md"} ${
           index == eventTypes.length - 1 && "rounded-b-md"
         }   `

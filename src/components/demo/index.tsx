@@ -78,7 +78,7 @@ export function Demo({ eventType }: { eventType: EventType }) {
   const showForm = !!dateParam && !!slotParam;
 
   return (
-    <div className="w-full  md:mt-20  px-8 py-6 rounded-lg max-w-max mx-auto">
+    <div className="w-full md:border  md:mt-20 md:bg-secondary/20 px-8 py-6 rounded-lg max-w-max mx-auto">
       <div className=" md:flex gap-6">
         <LeftPanel
           showForm={showForm}

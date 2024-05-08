@@ -54,6 +54,7 @@ export function CalendarGrid({
                   key={index}
                   state={state}
                   date={date}
+                  
                   currentMonth={startDate}
                 />
               );
