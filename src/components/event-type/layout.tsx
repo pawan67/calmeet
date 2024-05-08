@@ -45,7 +45,7 @@ const EventTypeFormLayout = ({ id }: { id: string }) => {
   const router = useRouter();
 
   return (
-    <div className=" py-10 md:py-0">
+    <div className=" ">
       <div className=" flex items-center  gap-2">
         <Button
           onClick={() => router.push("/dashboard/event-types")}

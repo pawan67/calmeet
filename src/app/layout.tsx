@@ -4,7 +4,6 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Providers from "@/components/shared/provider";
 
-
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -18,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body >
+    <html suppressHydrationWarning lang="en">
+      <body>
         <Providers>{children}</Providers>
       </body>
     </html>
