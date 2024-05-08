@@ -29,7 +29,7 @@ export function RightPanel({
 	return (
 		<Tabs
 			defaultValue="12"
-			className="flex flex-col gap-4 w-[280px] border-l pl-6"
+			className="flex flex-col gap-4 mt-5 md:mt-0  md:w-[280px] md:border-l md:pl-6"
 		>
 			<div className="flex justify-between items-center">
 				<p

@@ -35,7 +35,7 @@ export function LeftPanel({
   const slotParam = searchParams.get("slot");
 
   return (
-    <div className="flex flex-col gap-4 w-[280px] border-r pr-6">
+    <div className="flex flex-col gap-4 md:w-[280px] mb-10 md:mb-0 md:border-r  md:pr-6">
       <div className="grid gap-1">
         <TooltipProvider>
           <Tooltip>
@@ -55,7 +55,7 @@ export function LeftPanel({
       </div>
       <div className="grid gap-3">
         <p className="text-gray-12 text-2xl font-bold">{title}</p>
-		
+
         {showForm && (
           <div className="flex text-gray-12">
             <CalendarIcon className="size-4 mr-2" />

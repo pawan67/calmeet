@@ -131,7 +131,7 @@ export const changeStatusOfBooking = async (id: string, status: string) => {
   }
 };
 
-export const deleteBooking = async (id: string) => {
+export const deleteBookingById = async (id: string) => {
   try {
     const booking = await db.booking.delete({
       where: {

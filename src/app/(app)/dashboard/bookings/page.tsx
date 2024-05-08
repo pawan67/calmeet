@@ -1,17 +1,23 @@
 "use client";
 
-import { getAllBookings } from "@/actions/booking.actions";
+import {
+  changeStatusOfBooking,
+  deleteBookingById,
+  getAllBookings,
+} from "@/actions/booking.actions";
 import { getAuthorById } from "@/actions/user.actions";
 import { EventTypeSkeleton } from "@/components/profile/profile-page";
+import CustomAlert from "@/components/shared/custom-alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useUser } from "@clerk/nextjs";
 import { Booking, Prisma } from "@prisma/client";
-import { IconRowRemove, IconX } from "@tabler/icons-react";
-import { useQuery } from "@tanstack/react-query";
+import { IconDoorEnter, IconRowRemove, IconX } from "@tabler/icons-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const BookingsPage = () => {
   const { user } = useUser();
@@ -39,19 +45,43 @@ const BookingsPage = () => {
 };
 
 const BookingItem = ({ booking }: { booking: Booking }) => {
+  const queryClient = useQueryClient();
   const { data } = useQuery({
     queryKey: ["user", booking.userId],
     queryFn: async () => getAuthorById(booking.userId as string),
   });
 
+  const { mutate: cancel } = useMutation({
+    mutationFn: async () => changeStatusOfBooking(booking.id, "CANCELLED"),
+    onSuccess: () => {
+      toast.success("Booking has been cancelled");
+      queryClient.invalidateQueries({
+        queryKey: ["bookings"],
+      });
+    },
+
+    onError: () => {
+      toast.error("Error cancelling booking");
+    },
+  });
+  const { mutate: deleteBooking } = useMutation({
+    mutationFn: async () => deleteBookingById(booking.id),
+    onSuccess: () => {
+      toast.success("Booking has been deleted");
+      queryClient.invalidateQueries({
+        queryKey: ["bookings"],
+      });
+    },
+
+    onError: () => {
+      toast.error("Error deleting booking");
+    },
+  });
+
   const router = useRouter();
 
   return (
-    <Card
-      onClick={() => {
-        router.push(`/booking/${booking.id}`);
-      }}
-    >
+    <Card>
       <CardContent className=" items-center sm:flex justify-between pt-4">
         <div className=" flex space-x-10 ">
           <div className=" min-w-[170px]">
@@ -82,16 +112,45 @@ const BookingItem = ({ booking }: { booking: Booking }) => {
           </div>
         </div>
 
-        <div className=" mt-5 sm:mt-0">
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            variant="outline"
+        <div className=" mt-5">
+          <Link
+            className=" text-sm text-blue-400 hover:underline"
+            href={`/booking/${booking.id}`}
           >
-            <IconX size={20} className=" mr-2" />
-            Cancel
-          </Button>
+            View Booking Details
+          </Link>
+          <div className=" flex gap-3  mt-3">
+            <CustomAlert
+              onAction={(e: any) => {
+                e.stopPropagation();
+                cancel();
+              }}
+            >
+              <Button size="sm" variant="ghost">
+                Mark as done
+              </Button>
+            </CustomAlert>
+            <CustomAlert
+              onAction={(e: any) => {
+                e.stopPropagation();
+                cancel();
+              }}
+            >
+              <Button size="sm" variant="outline">
+                Cancel
+              </Button>
+            </CustomAlert>
+            <CustomAlert
+              onAction={(e: any) => {
+                e.stopPropagation();
+                cancel();
+              }}
+            >
+              <Button size="sm" variant="destructive">
+                Delete
+              </Button>
+            </CustomAlert>
+          </div>
         </div>
       </CardContent>
     </Card>
