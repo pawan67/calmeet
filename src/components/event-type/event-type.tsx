@@ -396,7 +396,7 @@ const EventTypeCard = ({
             <DropdownMenuItem
               className=" md:hidden "
               onClick={() => {
-                router.push(`/event-book/${eventType.id}`);
+                window.open(`/event-book/${eventType.id}`);
               }}
             >
               Go to event
