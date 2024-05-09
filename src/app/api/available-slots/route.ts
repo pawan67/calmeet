@@ -40,6 +40,8 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    console.log("BOOKED APPOINTMENTS", bookedAppointments);
+
     const availableSlots = generateAvailableSlots(
       startOfDay,
       endOfDay,
