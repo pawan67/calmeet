@@ -55,6 +55,8 @@ model Booking {
   host              String?
   AppointmentSchema AppointmentSchema[]
 
+  timeZone String?
+
   @@index([startTime, endTime])
 }
 
@@ -77,4 +79,5 @@ model AppointmentSchema {
   booking   Booking  @relation(fields: [bookingId], references: [id])
   startTime DateTime
   endTime   DateTime
+  timeZone  String?
 }

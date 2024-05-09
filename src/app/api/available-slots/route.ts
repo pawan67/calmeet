@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
     }
 
     const date = new Date(currentDate);
+
     const startOfDay = new Date(
       date.getFullYear(),
       date.getMonth(),

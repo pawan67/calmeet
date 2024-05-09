@@ -26,7 +26,13 @@ type Guest = {
   email: string;
 };
 
-export function FormPanel({ eventType }: { eventType: EventType }) {
+export function FormPanel({
+  eventType,
+  timeZone,
+}: {
+  eventType: EventType;
+  timeZone: string;
+}) {
   const { user, isLoaded } = useUser();
   const [note, setNote] = React.useState("");
   const router = useRouter();
@@ -57,6 +63,7 @@ export function FormPanel({ eventType }: { eventType: EventType }) {
         startTime: searchParams.get("slot") as unknown as Date,
         userId: user?.id as string,
         note: note,
+        timeZone: timeZone,
       };
       return await createBooking(payload);
     },

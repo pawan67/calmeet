@@ -36,16 +36,21 @@ export function RightPanel({
 
   const urlDate = searchParams.get("date");
 
-  const { data } = useQuery({
+  // const { data, isLoading, error } = useQuery({
+  //   queryKey: ["availableTime", date],
+  //   queryFn: async () => await availableSlots(date as any, eventAuthor),
+  // });
+  const { data, isLoading, error } = useQuery({
     queryKey: ["availableTime", date],
     queryFn: async () => {
-      const res = await axios.get(
+      const response = await axios.get(
         `/api/available-slots?date=${date}&eventAuthor=${eventAuthor}`
       );
-      return res.data;
+      return response.data;
     },
   });
 
+  console.log("ERROR", error);
   const { locale } = useLocale();
   const [dayNumber, dayName] = date
     .toDate(timeZone)
@@ -82,7 +87,7 @@ export function RightPanel({
             }}
           >
             <div className="grid  gap-2 pr-3">
-              {!data &&
+              {isLoading &&
                 [...Array(5)].map((_, index) => (
                   <Skeleton
                     className=" w-full h-8  my22

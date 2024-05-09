@@ -11,6 +11,7 @@ type Booking = {
   startTime: Date;
   userId: string;
   note: string;
+  timeZone: string;
 };
 export const createBooking = async (booking: Booking) => {
   console.log(booking);
@@ -25,6 +26,8 @@ export const createBooking = async (booking: Booking) => {
       throw new Error("Event not found");
     }
 
+    const startTimeDate = new Date(booking.startTime);
+
     let endTime = new Date(booking.startTime);
 
     if (eventType.durationInMinutes) {
@@ -38,20 +41,28 @@ export const createBooking = async (booking: Booking) => {
     const newBooking = await db.booking.create({
       data: {
         eventId: booking.eventId,
-        startTime: booking.startTime,
-        endTime: endTime,
+        startTime: startTimeDate, // Assuming startTime is in user's timezone
+        endTime: convertTimeToUTC(
+          startTimeDate,
+          eventType.durationInMinutes as number
+        ), // Convert to UTC before calculation
         note: booking.note,
         userId: booking.userId,
         host: eventType.authorId,
+        timeZone: booking.timeZone,
       },
     });
 
     await db.appointmentSchema.create({
       data: {
         userId: eventType.authorId,
-        startTime: booking.startTime,
-        endTime: endTime,
+        startTime: startTimeDate,
+        endTime: convertTimeToUTC(
+          startTimeDate,
+          eventType.durationInMinutes as number
+        ),
         bookingId: newBooking.id,
+        timeZone: booking.timeZone,
       },
     });
 
@@ -82,6 +93,13 @@ export const createBooking = async (booking: Booking) => {
   }
 };
 
+function convertTimeToUTC(startTime: Date, durationInMinutes?: number) {
+  const utcStartTime = new Date(startTime.toISOString()); // Convert to UTC
+  if (durationInMinutes) {
+    utcStartTime.setMinutes(utcStartTime.getMinutes() + durationInMinutes);
+  }
+  return utcStartTime;
+}
 export const getAllBookings = async (
   userId: string,
   status: string,

@@ -1,5 +1,6 @@
 import { AppointmentSchema } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx";
+import { formatInTimeZone, toDate } from "date-fns-tz";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -36,25 +37,30 @@ export function generateAvailableSlots(
 ) {
   const availableSlots: { 12: string; 24: string }[] = [];
   const slotDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
-  let currentTime = startOfDay.getTime();
-  const endTime = endOfDay.getTime();
+
+  // Convert startOfDay and endOfDay to local time for user display
+  const localStartOfDay = new Date(startOfDay.toLocaleString());
+  const localEndOfDay = new Date(endOfDay.toLocaleString());
+
+  let currentTime = localStartOfDay.getTime();
+  const endTime = localEndOfDay.getTime();
 
   while (currentTime < endTime) {
     const slotStartTime = new Date(currentTime);
     const slotEndTime = new Date(currentTime + slotDuration);
 
-    
     const isBooked = bookedAppointments.some((appointment) => {
-      const appointmentStartTime = new Date(appointment.startTime);
-      const appointmentEndTime = new Date(appointment.endTime);
+      // Convert appointment times to local time for comparison
+      const localAppointmentStartTime = new Date(appointment.startTime.toLocaleString());
+      const localAppointmentEndTime = new Date(appointment.endTime.toLocaleString());
 
       return (
-        (appointmentStartTime >= slotStartTime &&
-          appointmentStartTime < slotEndTime) ||
-        (appointmentEndTime > slotStartTime &&
-          appointmentEndTime <= slotEndTime) ||
-        (appointmentStartTime < slotStartTime &&
-          appointmentEndTime > slotEndTime)
+        (localAppointmentStartTime >= slotStartTime &&
+          localAppointmentStartTime < slotEndTime) ||
+        (localAppointmentEndTime > slotStartTime &&
+          localAppointmentEndTime <= slotEndTime) ||
+        (localAppointmentStartTime < slotStartTime &&
+          localAppointmentEndTime > slotEndTime)
       );
     });
 
@@ -72,6 +78,8 @@ export function generateAvailableSlots(
 
   return availableSlots;
 }
+
+
 
 export function formatTime(date: Date, format: "12" | "24"): string {
   const hours = date.getHours();
