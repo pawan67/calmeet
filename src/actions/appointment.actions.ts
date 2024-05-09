@@ -1,5 +1,4 @@
 "use server";
-export const dynamic = "force-dynamic"; // static by default, unless reading the request
 
 import { db } from "@/lib/db";
 import { generateAvailableSlots } from "@/lib/utils";
