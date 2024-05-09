@@ -38,12 +38,7 @@ export function RightPanel({
 
   const { data } = useQuery({
     queryKey: ["availableTime", date],
-    queryFn: async () => {
-      const res = await axios.get(
-        `/api/available-slots?date=${date}&eventAuthor=${eventAuthor}`
-      );
-      return res.data;
-    },
+    queryFn: async () => availableSlots(date as any, eventAuthor, timeZone),
   });
 
   const { locale } = useLocale();

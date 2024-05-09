@@ -11,6 +11,7 @@ type Booking = {
   startTime: Date;
   userId: string;
   note: string;
+  timeZone: string;
 };
 export const createBooking = async (booking: Booking) => {
   console.log(booking);
@@ -43,6 +44,7 @@ export const createBooking = async (booking: Booking) => {
         note: booking.note,
         userId: booking.userId,
         host: eventType.authorId,
+        timeZone: booking.timeZone,
       },
     });
 
@@ -52,6 +54,7 @@ export const createBooking = async (booking: Booking) => {
         startTime: booking.startTime,
         endTime: endTime,
         bookingId: newBooking.id,
+        timeZone: booking.timeZone,
       },
     });
 

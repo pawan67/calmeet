@@ -115,7 +115,7 @@ export function Demo({ eventType }: { eventType: EventType }) {
             />
           </>
         ) : (
-          <FormPanel eventType={eventType} />
+          <FormPanel timeZone={timeZone} eventType={eventType} />
         )}
       </div>
     </div>
