@@ -33,43 +33,52 @@ export function generateScale({
 export function generateAvailableSlots(
   startOfDay: Date,
   endOfDay: Date,
-  bookedAppointments: AppointmentSchema[],
-  timezone: string
+  bookedAppointments: AppointmentSchema[]
 ) {
   const availableSlots: { 12: string; 24: string }[] = [];
-  const slotDuration = 30; // 30 minutes in minutes
-  let currentTime = startOfDay.getTime();
-  const endTime = endOfDay.getTime();
+  const slotDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+  // Convert startOfDay and endOfDay to local time for user display
+  const localStartOfDay = new Date(startOfDay.toLocaleString());
+  const localEndOfDay = new Date(endOfDay.toLocaleString());
+
+  let currentTime = localStartOfDay.getTime();
+  const endTime = localEndOfDay.getTime();
 
   while (currentTime < endTime) {
     const slotStartTime = new Date(currentTime);
-    const slotEndTime = new Date(currentTime + slotDuration * 60 * 1000); // Convert duration to milliseconds
+    const slotEndTime = new Date(currentTime + slotDuration);
 
     const isBooked = bookedAppointments.some((appointment) => {
-      const appointmentStartTime = toDate(appointment.startTime, { timeZone: timezone });
-      const appointmentEndTime = toDate(appointment.endTime, { timeZone: timezone });
+      // Convert appointment times to local time for comparison
+      const localAppointmentStartTime = new Date(appointment.startTime.toLocaleString());
+      const localAppointmentEndTime = new Date(appointment.endTime.toLocaleString());
 
       return (
-        (appointmentStartTime >= slotStartTime && appointmentStartTime < slotEndTime) ||
-        (appointmentEndTime > slotStartTime && appointmentEndTime <= slotEndTime) ||
-        (appointmentStartTime < slotStartTime && appointmentEndTime > slotEndTime)
+        (localAppointmentStartTime >= slotStartTime &&
+          localAppointmentStartTime < slotEndTime) ||
+        (localAppointmentEndTime > slotStartTime &&
+          localAppointmentEndTime <= slotEndTime) ||
+        (localAppointmentStartTime < slotStartTime &&
+          localAppointmentEndTime > slotEndTime)
       );
     });
 
     if (!isBooked) {
-      const slotStart12HourFormat = formatInTimeZone(slotStartTime, 'h:mm a', { timeZone: timezone });
-      const slotStart24HourFormat = formatInTimeZone(slotStartTime, 'HH:mm', { timeZone: timezone });
+      const slotStart12HourFormat = formatTime(slotStartTime, "12");
+      const slotStart24HourFormat = formatTime(slotStartTime, "24");
       availableSlots.push({
         12: slotStart12HourFormat,
         24: slotStart24HourFormat,
       });
     }
 
-    currentTime += slotDuration * 60 * 1000; // Move to the next slot in milliseconds
+    currentTime += slotDuration;
   }
 
   return availableSlots;
 }
+
 
 
 export function formatTime(date: Date, format: "12" | "24"): string {
