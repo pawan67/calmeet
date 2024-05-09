@@ -41,6 +41,7 @@ export function generateAvailableSlots(
     const slotStartTime = new Date(currentTime);
     const slotEndTime = new Date(currentTime + slotDuration);
 
+    
     const isBooked = bookedAppointments.some((appointment) => {
       const appointmentStartTime = new Date(appointment.startTime);
       const appointmentEndTime = new Date(appointment.endTime);
