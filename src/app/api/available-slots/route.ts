@@ -25,11 +25,13 @@ export async function GET(req: NextRequest) {
     const date = new Date(currentDate);
     const startOfDay = new Date(
       date.getFullYear(),
-      date.getMonth(),
+      date.getMonth() + 1,
       date.getDate()
     );
     const endOfDay = new Date(startOfDay.getTime() + 86400000); // 24 hours in milliseconds
 
+    console.log("START OF DAY", startOfDay);
+    console.log("END OF DAY", endOfDay);
     const bookedAppointments = await db.appointmentSchema.findMany({
       where: {
         startTime: {
