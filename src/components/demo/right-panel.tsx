@@ -11,6 +11,7 @@ import { availableSlots } from "@/actions/appointment.actions";
 import { useAuth } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
 import { Skeleton } from "../ui/skeleton";
+import axios from "axios";
 
 export function RightPanel({
   date,
@@ -25,16 +26,22 @@ export function RightPanel({
   handleChangeAvailableTime: (time: string) => void;
   eventAuthor: string;
 }) {
-  
+  // const { data } = useQuery({
+  //   queryKey: ["availableTime", date.toDate(timeZone)],
+  //   queryFn: async () =>
+  //     await availableSlots(date.toDate(timeZone), eventAuthor),
+  // });
   const { data } = useQuery({
     queryKey: ["availableTime", date.toDate(timeZone)],
-    queryFn: async () =>
-      await availableSlots(date.toDate(timeZone), eventAuthor),
+    queryFn: async () => {
+      const res = await axios.get(
+        `/api/available-slots?date=${date.toDate(
+          timeZone
+        )}&eventAuthor=${eventAuthor}`
+      );
+      return res.data;
+    },
   });
-
-  
-
-
 
   const { locale } = useLocale();
   const [dayNumber, dayName] = date
@@ -73,9 +80,14 @@ export function RightPanel({
           >
             <div className="grid  gap-2 pr-3">
               {!data &&
-                [...Array(5)].map((_, index) => <Skeleton className=" w-full h-8  my22
-                " key={index} />)}
-              {data?.map((availableTime) => (
+                [...Array(5)].map((_, index) => (
+                  <Skeleton
+                    className=" w-full h-8  my22
+                "
+                    key={index}
+                  />
+                ))}
+              {data?.map((availableTime: any) => (
                 <Button
                   variant="outline"
                   onClick={() =>
