@@ -57,7 +57,10 @@ export const createBooking = async (booking: Booking) => {
       data: {
         userId: eventType.authorId,
         startTime: startTimeDate,
-        endTime: endTime,
+        endTime: convertTimeToUTC(
+          startTimeDate,
+          eventType.durationInMinutes as number
+        ),
         bookingId: newBooking.id,
         timeZone: booking.timeZone,
       },
