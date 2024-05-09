@@ -25,12 +25,16 @@ export function RightPanel({
   handleChangeAvailableTime: (time: string) => void;
   eventAuthor: string;
 }) {
-  const searchParams = useSearchParams();
+  
   const { data } = useQuery({
     queryKey: ["availableTime", date.toDate(timeZone)],
     queryFn: async () =>
       await availableSlots(date.toDate(timeZone), eventAuthor),
   });
+
+  
+
+
 
   const { locale } = useLocale();
   const [dayNumber, dayName] = date

@@ -18,6 +18,7 @@ const EventBookPage = ({
   const { data: eventType, isLoading } = useQuery({
     queryKey: ["event", params.id],
     queryFn: async () => getEvent(params.id),
+    
   });
 
   if (isLoading && !eventType) return <FullPageLoader />;

@@ -1,4 +1,6 @@
 "use server";
+export const dynamic = 'force-dynamic'; // static by default, unless reading the request
+
 import { db } from "@/lib/db";
 import { AppointmentSchema } from "@prisma/client";
 
@@ -14,8 +16,6 @@ export const availableSlots = async (
       date.getDate()
     );
     const endOfDay = new Date(startOfDay.getTime() + 86400000); // 24 hours in milliseconds
-
-    console.log("startOfDay", startOfDay, date, endOfDay);
 
     const bookedAppointments = await db.appointmentSchema.findMany({
       where: {
@@ -33,7 +33,6 @@ export const availableSlots = async (
       bookedAppointments
     );
 
-    console.log(availableSlots);
     return availableSlots;
   } catch (error: any) {
     throw new Error(error.message);
@@ -92,3 +91,4 @@ function formatTime(date: Date, format: "12" | "24"): string {
 
   return `${formattedHours}:${formattedMinutes}${format === "12" ? ampm : ""}`;
 }
+
