@@ -31,13 +31,16 @@ export function RightPanel({
   //   queryFn: async () =>
   //     await availableSlots(date.toDate(timeZone), eventAuthor),
   // });
+
+  const searchParams = useSearchParams();
+
+  const urlDate = searchParams.get("date");
+
   const { data } = useQuery({
-    queryKey: ["availableTime", date.toDate(timeZone)],
+    queryKey: ["availableTime", date],
     queryFn: async () => {
       const res = await axios.get(
-        `/api/available-slots?date=${date.toDate(
-          timeZone
-        )}&eventAuthor=${eventAuthor}`
+        `/api/available-slots?date=${date}&eventAuthor=${eventAuthor}`
       );
       return res.data;
     },

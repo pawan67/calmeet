@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     const date = new Date(currentDate);
     const startOfDay = new Date(
       date.getFullYear(),
-      date.getMonth() + 1,
+      date.getMonth(),
       date.getDate()
     );
     const endOfDay = new Date(startOfDay.getTime() + 86400000); // 24 hours in milliseconds
@@ -49,8 +49,6 @@ export async function GET(req: NextRequest) {
       endOfDay,
       bookedAppointments
     );
-
-    console.log("AVAILABLE SLOTS", availableSlots);
 
     return new Response(JSON.stringify(availableSlots));
   } catch (error) {

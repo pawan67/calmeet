@@ -27,6 +27,8 @@ export function generateScale({
 }
 
 
+
+
 export function generateAvailableSlots(
   startOfDay: Date,
   endOfDay: Date,
