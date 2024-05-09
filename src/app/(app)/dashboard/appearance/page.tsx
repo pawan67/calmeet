@@ -11,9 +11,9 @@ const AppearancePage = () => {
       <div className=" my-5">
         <Card className=" ">
           <CardHeader className=" border-b">
-            <h3 className="  font-semibold">Dashboard Theme</h3>
+            <h3 className="  font-semibold">App Theme</h3>
             <p className=" text-sm">
-              This only applies to your logged in dashboard
+              This applies to the current device and browser
             </p>
           </CardHeader>
 

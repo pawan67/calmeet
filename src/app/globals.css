@@ -10,8 +10,7 @@ html {
   color-scheme: dark;
 }
 
-
-:root  {
+:root {
   --background: 35 8% 95%;
   --foreground: 35 5% 4%;
   --card: 35 8% 90%;
@@ -33,7 +32,7 @@ html {
   --ring: 35 35% 64%;
   --radius: 1rem;
 }
-.dark  {
+.dark {
   --background: 35 10% 5%;
   --foreground: 35 5% 90%;
   --card: 35 8% 4%;
@@ -95,6 +94,11 @@ html {
   height: 100%;
 }
 
+.str-video__video-preview-container {
+  max-width: 500px !important;
+  
+
+}
 .str-video__call-controls__button {
   height: 40px;
 }

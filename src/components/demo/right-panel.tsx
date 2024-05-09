@@ -6,6 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { DateValue } from "@react-aria/calendar";
 import { useLocale } from "@react-aria/i18n";
 import { availableTimes } from "./available-times";
+import { useQuery } from "@tanstack/react-query";
+import { availableSlots } from "@/actions/appointment.actions";
+import { useAuth } from "@clerk/nextjs";
+import { useSearchParams } from "next/navigation";
 
 export function RightPanel({
   date,
@@ -18,6 +22,14 @@ export function RightPanel({
   weeksInMonth: number;
   handleChangeAvailableTime: (time: string) => void;
 }) {
+  const { userId } = useAuth();
+  const searchParams = useSearchParams();
+  const { data } = useQuery({
+    queryKey: ["availableTime", date.toDate(timeZone)],
+    queryFn: async () =>
+      await availableSlots(date.toDate(timeZone), userId as string),
+  });
+
   const { locale } = useLocale();
   const [dayNumber, dayName] = date
     .toDate(timeZone)
@@ -26,6 +38,7 @@ export function RightPanel({
       day: "numeric",
     })
     .split(" ");
+
   return (
     <Tabs
       defaultValue="12"
@@ -47,13 +60,14 @@ export function RightPanel({
         <TabsContent key={time} value={time}>
           <ScrollArea
             type="always"
-            className="h-full"
+            className="h-[380px] "
             style={{
               maxHeight: weeksInMonth > 5 ? "380px" : "320px",
             }}
           >
-            <div className="grid gap-2 pr-3">
-              {availableTimes.map((availableTime) => (
+            <div className="grid  gap-2 pr-3">
+              {!data && <p className="text-gray-12 text-sm">Loading...</p>}
+              {data?.map((availableTime) => (
                 <Button
                   variant="outline"
                   onClick={() =>

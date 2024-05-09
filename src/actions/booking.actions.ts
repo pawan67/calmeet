@@ -46,6 +46,15 @@ export const createBooking = async (booking: Booking) => {
       },
     });
 
+    await db.appointmentSchema.create({
+      data: {
+        userId: booking.userId,
+        startTime: booking.startTime,
+        endTime: endTime,
+        bookingId: newBooking.id,
+      },
+    });
+
     const hostUser = await getAuthorById(eventType.authorId);
     const attendeeUser = await getAuthorById(booking.userId);
     console.log("hostUser", hostUser.emailAddresses[0].emailAddress);
@@ -139,6 +148,14 @@ export const changeStatusOfBooking = async (id: string, status: string) => {
       },
     });
 
+    if (status === "CANCELLED" || status == "ENDED") {
+      await db.appointmentSchema.deleteMany({
+        where: {
+          bookingId: id,
+        },
+      });
+    }
+
     return booking;
   } catch (error: any) {
     throw new Error(error.message);
@@ -150,6 +167,12 @@ export const deleteBookingById = async (id: string) => {
     const booking = await db.booking.delete({
       where: {
         id: id,
+      },
+    });
+
+    await db.appointmentSchema.deleteMany({
+      where: {
+        bookingId: id,
       },
     });
 

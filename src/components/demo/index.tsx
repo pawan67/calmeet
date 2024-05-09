@@ -31,6 +31,10 @@ export function Demo({ eventType }: { eventType: EventType }) {
     date
   );
 
+  React.useEffect(() => {
+    handleChangeDate(today(getLocalTimeZone()));
+  }, [dateParam]);
+
   const weeksInMonth = getWeeksInMonth(focusedDate as DateValue, locale);
 
   const handleChangeDate = (date: DateValue) => {

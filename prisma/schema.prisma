@@ -32,7 +32,7 @@ model Booking {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  note       String?
+  note        String?
   description String?
   startTime   DateTime
   endTime     DateTime
@@ -48,15 +48,13 @@ model Booking {
   attendees Attendee[]
 
   // Enum for the status of the booking
-  status String @default("PENDING") // PENDING, CONFIRMED, CANCELLED, ENDED
+  status String @default("UPCOMING") // UPCOMING, CONFIRMED, CANCELLED, ENDED
 
-  host String?
+  host              String?
+  AppointmentSchema AppointmentSchema[]
 
   @@index([startTime, endTime])
 }
-
-
-
 
 model Attendee {
   id        String   @id @default(uuid())
@@ -68,4 +66,13 @@ model Attendee {
 
   bookingId String
   booking   Booking @relation(fields: [bookingId], references: [id])
+}
+
+model AppointmentSchema {
+  id        String   @id @default(uuid())
+  userId    String
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  startTime DateTime
+  endTime   DateTime
 }

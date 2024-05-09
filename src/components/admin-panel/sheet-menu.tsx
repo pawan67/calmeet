@@ -10,8 +10,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Logo from "../shared/logo";
+import { useRouter } from "next/navigation";
 
 export function SheetMenu() {
+  const router = useRouter();
   return (
     <Sheet>
       <SheetTrigger className="lg:hidden" asChild>
@@ -21,14 +23,14 @@ export function SheetMenu() {
       </SheetTrigger>
       <SheetContent className="sm:w-72 px-3 h-full flex flex-col" side="left">
         <SheetHeader>
-          <div
-            className="flex  justify-start items-center pb-2 px-2 pt-1"
-            
-          >
-            <Link href="/dashboard" className="flex items-center gap-2">
+          <div className="flex  justify-start items-center pb-2 px-2 pt-1">
+            <div
+              onClick={() => router.push("/dashboard")}
+              className="flex items-center gap-2"
+            >
               <Logo size="md" />
               <h1 className="font-bold text-lg">Calmeet</h1>
-            </Link>
+            </div>
           </div>
         </SheetHeader>
         <Menu isOpen />

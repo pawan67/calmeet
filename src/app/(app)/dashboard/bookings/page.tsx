@@ -33,8 +33,8 @@ import NoData from "@/components/shared/no-data";
 const BookingsPage = () => {
   const [dateRange, setDateRange] = useState<DateRange>();
   const [selectedStatus, setSelectedStatus] = useState<
-    "PENDING" | "CONFIRMED" | "CANCELLED" | "ENDED"
-  >("PENDING");
+    "UPCOMING" | "CONFIRMED" | "CANCELLED" | "ENDED"
+  >("UPCOMING");
   const { user } = useUser();
   const { data, isLoading } = useQuery({
     queryKey: ["bookings", selectedStatus, dateRange],
@@ -52,17 +52,17 @@ const BookingsPage = () => {
         <Select
           onValueChange={(e) =>
             setSelectedStatus(
-              e as "PENDING" | "CONFIRMED" | "CANCELLED" | "ENDED"
+              e as "UPCOMING" | "CONFIRMED" | "CANCELLED" | "ENDED"
             )
           }
         >
           <SelectTrigger className="w-[180px] h-11">
-            <SelectValue placeholder="Pending  " />
+            <SelectValue placeholder="Upcoming  " />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="CANCELLED">Cancelled</SelectItem>
             <SelectItem value="CONFIRMED">Confirmed</SelectItem>
-            <SelectItem value="PENDING">Pending</SelectItem>
+            <SelectItem value="UPCOMING">Upcoming</SelectItem>
             <SelectItem value="ENDED">Ended</SelectItem>
           </SelectContent>
         </Select>

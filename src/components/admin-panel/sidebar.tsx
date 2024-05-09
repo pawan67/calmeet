@@ -8,10 +8,11 @@ import { Menu } from "@/components/admin-panel/menu";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { SidebarToggle } from "@/components/admin-panel/sidebar-toggle";
 import Logo from "../shared/logo";
+import { useRouter } from "next/navigation";
 
 export function Sidebar() {
   const sidebar = useStore(useSidebarToggle, (state) => state);
-
+  const router = useRouter();
   return (
     <aside
       className={cn(
@@ -27,7 +28,10 @@ export function Sidebar() {
             sidebar?.isOpen === false ? "translate-x-1" : "translate-x-0"
           )}
         >
-          <Link href="/dashboard" className="flex items-center  gap-2">
+          <div
+            onClick={() => router.push("/dashboard")}
+            className="flex items-center  gap-2"
+          >
             <Logo size="sm" className="w-6 h-6 mr-1" />
             <h1
               className={cn(
@@ -39,7 +43,7 @@ export function Sidebar() {
             >
               Calmeet
             </h1>
-          </Link>
+          </div>
         </div>
         <Menu isOpen={sidebar?.isOpen} />
       </div>
