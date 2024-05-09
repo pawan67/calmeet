@@ -2,7 +2,10 @@
 import { db } from "@/lib/db";
 import { AppointmentSchema } from "@prisma/client";
 
-export const availableSlots = async (currentDate: Date, userId: string) => {
+export const availableSlots = async (
+  currentDate: Date,
+  eventAuthor: string
+) => {
   try {
     const date = new Date(currentDate);
     const startOfDay = new Date(
@@ -13,13 +16,14 @@ export const availableSlots = async (currentDate: Date, userId: string) => {
     const endOfDay = new Date(startOfDay.getTime() + 86400000); // 24 hours in milliseconds
 
     console.log("startOfDay", startOfDay, date, endOfDay);
+
     const bookedAppointments = await db.appointmentSchema.findMany({
       where: {
         startTime: {
           gte: startOfDay,
           lt: endOfDay,
         },
-        userId: userId,
+        userId: eventAuthor,
       },
     });
 

@@ -13,7 +13,13 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <ClerkProvider>
+      <ClerkProvider
+        appearance={{
+          variables: {
+            colorPrimary: "hsl(35 35% 64%)", // change this value (you can get it from you're css variables, make sure to include 'hsl' and commas)
+          },
+        }}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

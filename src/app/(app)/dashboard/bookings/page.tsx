@@ -108,6 +108,19 @@ const BookingItem = ({ booking }: { booking: Booking }) => {
       toast.error("Error cancelling booking");
     },
   });
+  const { mutate: ended } = useMutation({
+    mutationFn: async () => changeStatusOfBooking(booking.id, "ENDED"),
+    onSuccess: () => {
+      toast.success("Booking has marked as done");
+      queryClient.invalidateQueries({
+        queryKey: ["bookings"],
+      });
+    },
+
+    onError: () => {
+      toast.error("Error marking as done");
+    },
+  });
   const { mutate: deleteBooking } = useMutation({
     mutationFn: async () => deleteBookingById(booking.id),
     onSuccess: () => {
@@ -164,26 +177,32 @@ const BookingItem = ({ booking }: { booking: Booking }) => {
             View Booking Details
           </Link>
           <div className=" flex gap-3  mt-3">
-            <CustomAlert
-              onAction={(e: any) => {
-                e.stopPropagation();
-                cancel();
-              }}
-            >
-              <Button size="sm" variant="ghost">
-                Mark as done
-              </Button>
-            </CustomAlert>
-            <CustomAlert
-              onAction={(e: any) => {
-                e.stopPropagation();
-                cancel();
-              }}
-            >
-              <Button size="sm" variant="outline">
-                Cancel
-              </Button>
-            </CustomAlert>
+            {booking.status == "UPCOMING" && (
+              <CustomAlert
+                onAction={(e: any) => {
+                  e.stopPropagation();
+                  ended();
+                }}
+              >
+                <Button size="sm" variant="ghost">
+                  Mark as done
+                </Button>
+              </CustomAlert>
+            )}
+
+            {booking.status == "UPCOMING" && (
+              <CustomAlert
+                onAction={(e: any) => {
+                  e.stopPropagation();
+                  cancel();
+                }}
+              >
+                <Button size="sm" variant="outline">
+                  Cancel
+                </Button>
+              </CustomAlert>
+            )}
+
             <CustomAlert
               description="Are you sure you want to delete this booking? This action cannot be undone."
               onAction={(e: any) => {

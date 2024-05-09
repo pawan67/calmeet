@@ -103,7 +103,13 @@ export function Demo({ eventType }: { eventType: EventType }) {
               onFocusChange={(focused) => setFocusedDate(focused)}
             />
             <RightPanel
-              {...{ date, timeZone, weeksInMonth, handleChangeAvailableTime }}
+              {...{
+                date,
+                timeZone,
+                weeksInMonth,
+                handleChangeAvailableTime,
+                eventAuthor: eventType.authorId,
+              }}
             />
           </>
         ) : (

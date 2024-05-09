@@ -70,7 +70,7 @@ export function getPages(pathname: string): Group[] {
           submenus: [],
         },
         {
-          href: "/account",
+          href: "/dashboard/account",
           label: "Account",
           active: pathname.includes("/account"),
           icon: Settings,

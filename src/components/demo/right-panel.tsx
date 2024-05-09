@@ -10,24 +10,26 @@ import { useQuery } from "@tanstack/react-query";
 import { availableSlots } from "@/actions/appointment.actions";
 import { useAuth } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
+import { Skeleton } from "../ui/skeleton";
 
 export function RightPanel({
   date,
   timeZone,
   weeksInMonth,
   handleChangeAvailableTime,
+  eventAuthor,
 }: {
   date: DateValue;
   timeZone: string;
   weeksInMonth: number;
   handleChangeAvailableTime: (time: string) => void;
+  eventAuthor: string;
 }) {
-  const { userId } = useAuth();
   const searchParams = useSearchParams();
   const { data } = useQuery({
     queryKey: ["availableTime", date.toDate(timeZone)],
     queryFn: async () =>
-      await availableSlots(date.toDate(timeZone), userId as string),
+      await availableSlots(date.toDate(timeZone), eventAuthor),
   });
 
   const { locale } = useLocale();
@@ -66,7 +68,9 @@ export function RightPanel({
             }}
           >
             <div className="grid  gap-2 pr-3">
-              {!data && <p className="text-gray-12 text-sm">Loading...</p>}
+              {!data &&
+                [...Array(5)].map((_, index) => <Skeleton className=" w-full h-8  my22
+                " key={index} />)}
               {data?.map((availableTime) => (
                 <Button
                   variant="outline"
