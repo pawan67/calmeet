@@ -17,6 +17,8 @@ import { LeftPanel } from "./left-panel";
 import { RightPanel } from "./right-panel";
 import { EventType } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 export function Demo({ eventType }: { eventType: EventType }) {
   const router = useRouter();
   const { locale } = useLocale();

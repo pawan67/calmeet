@@ -6,6 +6,8 @@ import { db } from "@/lib/db";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 const EventBookPage = ({
   params,
 }: {
