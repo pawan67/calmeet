@@ -24,8 +24,6 @@ export async function GET(req: NextRequest) {
 
     const date = new Date(currentDate);
 
-    date.setUTCHours;
-
     const startOfDay = new Date(
       date.getFullYear(),
       date.getMonth(),
