@@ -6,7 +6,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <div className="min-h-screen container mx-auto  relative">
       <Header />
       <main>{children}</main>
-      <Footer />
+      <Footer />{" "}
     </div>
   );
 };

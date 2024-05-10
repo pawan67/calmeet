@@ -1,4 +1,5 @@
 "use client";
+import ShimmerButton from "@/components/magicui/shimmer-button";
 import { Button } from "@/components/ui/button";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
@@ -13,13 +14,19 @@ const Header = () => {
       <div>
         {isSignedIn ? (
           <Link href="/dashboard">
-            <Button className="   font-semibold px-5">
-              Enter Calmeet
-            </Button>
+            <ShimmerButton className="shadow-2xl">
+              <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
+                Enter Calmeet
+              </span>
+            </ShimmerButton>
           </Link>
         ) : (
           <SignInButton mode="modal">
-            <Button className="   font-semibold px-5">Login</Button>
+            <ShimmerButton className="shadow-2xl">
+              <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
+                Login
+              </span>
+            </ShimmerButton>
           </SignInButton>
         )}
       </div>

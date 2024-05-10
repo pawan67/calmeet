@@ -16,7 +16,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
       <ClerkProvider
         appearance={{
           variables: {
-            colorPrimary: "hsl(35 35% 64%)", // change this value (you can get it from you're css variables, make sure to include 'hsl' and commas)
+            colorPrimary: "hsl(24 9.8% 10%)", // change this value (you can get it from you're css variables, make sure to include 'hsl' and commas)
           },
         }}
       >
