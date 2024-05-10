@@ -48,11 +48,18 @@ export const generateHTML = (
         font-weight: bold;
         color: #333333;
       }
+      .image-logo {
+        max-width: 100px;
+        display: block;
+        margin: 0 auto;
+      }
       /* Add more custom styles as needed */
     </style>
   </head>
   <body>
     <div class="container">
+    <img src="https://i.imgur.com/W5YEdcK.png" class="image-logo" alt="">
+
       <p class="text-lg">Hi ${hostUser.firstName},</p>
       <p>${attendeeUser.firstName} has booked an event with you.</p>
       <p>Event: ${eventType.title}</p>
@@ -103,11 +110,17 @@ export const generateHTMLForAttendee = (
           color: #333333;
         }
         /* Add more custom styles as needed */
+        .image-logo {
+          max-width: 100px;
+          display: block;
+          margin: 0 auto;
+        }
       </style>
     </head>
     <body>
       <div class="container">
-        <p class="text-lg">Hi ${attendeeUser.firstName},</p>
+      <img src="https://i.imgur.com/W5YEdcK.png" class="image-logo" alt="">
+      <p class="text-lg">Hi ${attendeeUser.firstName},</p>
         <p>You have succesfully  booked an event with ${hostUser.firstName}.</p>
         <p>Event: ${eventType.title}</p>
         <p>Start time: ${date}</p>
