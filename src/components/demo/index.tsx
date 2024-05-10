@@ -73,7 +73,7 @@ export function Demo({ eventType }: { eventType: EventType }) {
       hours = 0;
     }
 
-    const currentDate = date.toDate(timeZone);
+    const currentDate = new Date()
     currentDate.setHours(hours, minutes);
 
     const url = new URL(window.location.href);

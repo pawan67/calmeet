@@ -52,6 +52,8 @@ export function RightPanel({
 
   console.log("ERROR", error);
   const { locale } = useLocale();
+
+  
   const [dayNumber, dayName] = date
     .toDate(timeZone)
     .toLocaleDateString(locale, {
