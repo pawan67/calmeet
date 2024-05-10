@@ -5,6 +5,10 @@ import { useAuth } from "@clerk/nextjs";
 import { getAuthorById } from "./user.actions";
 import sendEmail from "@/lib/utils/sendEmail";
 import { DateRange } from "react-day-picker";
+import {
+  generateHTML,
+  generateHTMLForAttendee,
+} from "@/lib/utils/emailTemplate";
 
 type Booking = {
   eventId: string;
@@ -69,22 +73,35 @@ export const createBooking = async (booking: Booking) => {
     const hostUser = await getAuthorById(eventType.authorId);
     const attendeeUser = await getAuthorById(booking.userId);
     console.log("hostUser", hostUser.emailAddresses[0].emailAddress);
-    await sendEmail({
-      to: [
-        hostUser.emailAddresses[0].emailAddress,
-        attendeeUser.emailAddresses[0].emailAddress,
-      ],
-      subject: "New booking",
-      html: `<p>Hi ${hostUser.firstName},</p>
-      <p>${attendeeUser.firstName} has booked an event with you.</p>
-      <p>Event: ${eventType.title}</p>
-      <p>Start time: ${booking.startTime}</p>
-      <p>Note: ${booking.note}</p>
-      <p>Attendee: ${attendeeUser.firstName} ${attendeeUser.lastName}</p>
-      <p>Email: ${attendeeUser.emailAddresses[0].emailAddress}</p>
+    const link = `https://calmeet.vercel.app/video/${newBooking.id}`;
+    const htmlContent = generateHTML(
+      hostUser,
+      attendeeUser,
+      eventType,
+      booking,
+      startTimeDate,
+      link
+    );
 
-      <p>Best regards,</p>
-      <p>Calmeet</p>`,
+    const htmlContent2 = generateHTMLForAttendee(
+      hostUser,
+      attendeeUser,
+      eventType,
+      booking,
+      startTimeDate,
+      link
+    );
+
+    await sendEmail({
+      to: [hostUser.emailAddresses[0].emailAddress],
+      subject: "New booking confirmation email",
+      html: htmlContent,
+    });
+    await sendEmail({
+      to: [attendeeUser.emailAddresses[0].emailAddress],
+      subject: "New booking confirmation email",
+
+      html: htmlContent2,
     });
 
     return newBooking;
