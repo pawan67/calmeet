@@ -74,6 +74,7 @@ export function Demo({ eventType }: { eventType: EventType }) {
     }
 
     const currentDate = date.toDate(timeZone);
+    console.log("CUrrent timezone", timeZone);
     currentDate.setHours(hours, minutes);
 
     const url = new URL(window.location.href);

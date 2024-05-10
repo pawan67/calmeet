@@ -41,10 +41,12 @@ export function RightPanel({
   //   queryFn: async () => await availableSlots(date as any, eventAuthor),
   // });
   const { data, isLoading, error } = useQuery({
-    queryKey: ["availableTime", date],
+    queryKey: ["availableTime", date.toDate(timeZone), eventAuthor],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/available-slots?date=${date}&eventAuthor=${eventAuthor}`
+        `/api/available-slots?date=${date.toDate(
+          timeZone
+        )}&eventAuthor=${eventAuthor}`
       );
       return response.data;
     },
