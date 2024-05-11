@@ -8,6 +8,7 @@ import { DateRange } from "react-day-picker";
 import {
   generateHTML,
   generateHTMLForAttendee,
+  generateHTMLForGuests,
 } from "@/lib/utils/emailTemplate";
 
 type Booking = {
@@ -16,6 +17,7 @@ type Booking = {
   userId: string;
   note: string;
   timeZone: string;
+  guests?: string[];
 };
 export const createBooking = async (booking: Booking) => {
   console.log(booking);
@@ -30,7 +32,7 @@ export const createBooking = async (booking: Booking) => {
       throw new Error("Event not found");
     }
 
-    const startTimeDate = new Date(booking.startTime)
+    const startTimeDate = new Date(booking.startTime);
 
     let endTime = new Date(booking.startTime);
 
@@ -82,7 +84,7 @@ export const createBooking = async (booking: Booking) => {
       booking,
       startTimeDate,
       link,
-      bookingLink 
+      bookingLink
     );
 
     const htmlContent2 = generateHTMLForAttendee(
@@ -94,6 +96,26 @@ export const createBooking = async (booking: Booking) => {
       link,
       bookingLink
     );
+
+    const forGuests = generateHTMLForGuests(
+      hostUser,
+      attendeeUser,
+      eventType,
+      booking,
+      startTimeDate,
+      link,
+      bookingLink
+    );
+
+    if (booking.guests) {
+      for (const guest of booking.guests) {
+        await sendEmail({
+          to: [guest],
+          subject: `${attendeeUser.firstName} invited you to a meeting `,
+          html: forGuests,
+        });
+      }
+    }
 
     await sendEmail({
       to: [hostUser.emailAddresses[0].emailAddress],

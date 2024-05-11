@@ -64,6 +64,7 @@ export function FormPanel({
         userId: user?.id as string,
         note: note,
         timeZone: timeZone,
+        guests: guests.map((guest) => guest.email),
       };
       return await createBooking(payload);
     },
@@ -80,6 +81,8 @@ export function FormPanel({
       toast.error(error.message);
     },
   });
+
+  console.log(guests)
 
   if (!isLoaded && !user) return null;
 
@@ -136,7 +139,7 @@ export function FormPanel({
           </div>
         </>
       )}
-      {/* <Button
+      <Button
         type="button"
         variant="ghost"
         onClick={() => addGuest()}
@@ -144,7 +147,7 @@ export function FormPanel({
       >
         <UserPlus className="mr-2 size-4" />
         Add guests
-      </Button> */}
+      </Button>
       <p className="text-gray-11 text-xs my-4">
         By proceeding, you agree to our{" "}
         <span className="text-gray-12">Terms</span> and{" "}

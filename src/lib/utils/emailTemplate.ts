@@ -70,7 +70,7 @@ export const generateHTML = (
       <p>Attendee Email: ${attendeeUser.emailAddresses[0].emailAddress}</p>
       <p>Timezone: ${booking.timeZone}</p>
       <p>Link for the meeting: p> <a href="${link}">${link}</a></p>
-      <p>Booking: p> <a href="${bookingLink}">${bookingLink}</a></p>
+      <p>Booking: <a href="${bookingLink}">Booking details</a></p>
 
       <p>Best regards,</p>
       <p>Calmeet</p>
@@ -133,7 +133,72 @@ export const generateHTMLForAttendee = (
         <p>Host Email: ${hostUser.emailAddresses[0].emailAddress}</p>
         <p>Timezone: ${booking.timeZone}</p>
         <p>Link for the meeting:  <a href="${link}">${link}</a></p>
-        <p>Booking: p> <a href="${bookingLink}">${bookingLink}</a></p>
+        <p>Booking: <a href="${bookingLink}">Booking details</a></p>
+
+        
+
+        <p>Best regards,</p>
+        <p>Calmeet</p>
+      </div>
+    </body>
+  </html>
+      `;
+};
+export const generateHTMLForGuests = (
+  hostUser: User,
+  attendeeUser: User,
+  eventType: EventType,
+  booking: Booking,
+  date: Date,
+  link: string,
+  bookingLink: string
+): string => {
+  return `
+    <html>
+    <head>
+      <title>Invited to a meeting</title>
+      <style>
+        /* Add custom CSS styles here */
+        body {
+          background-color: #f3f4f6;
+          font-family: Arial, sans-serif;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #ffffff;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .text-lg {
+          font-size: 1.25rem;
+          font-weight: bold;
+          color: #333333;
+        }
+        /* Add more custom styles as needed */
+        .image-logo {
+          max-width: 100px;
+          display: block;
+          margin: 0 auto;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+      <img src="https://i.imgur.com/W5YEdcK.png" class="image-logo" alt="">
+      
+        <p>You are invited to a meeting with ${hostUser.firstName} from ${
+    attendeeUser.emailAddresses[0].emailAddress
+  } </p>
+        <p>Event: ${eventType.title}</p>
+        <p>Start time: ${date}</p>
+        <p>Note: ${booking.note || ""}</p>
+      
+        <p>Host Email: ${hostUser.emailAddresses[0].emailAddress}</p>
+        <p>Timezone: ${booking.timeZone}</p>
+        <p>Link for the meeting:  <a href="${link}">${link}</a></p>
+        <p>Booking: <a href="${bookingLink}">Booking details</a></p>
 
         
 

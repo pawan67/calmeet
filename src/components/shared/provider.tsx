@@ -1,7 +1,7 @@
 "use client";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider, useTheme } from "next-themes";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -10,13 +10,17 @@ import StreamClientProvider from "../video/video-meet";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = React.useState(() => new QueryClient());
+  const { theme } = useTheme();
+
+  const primaryHsl =
+    theme === "dark" ? "hsl(60 9.1% 97.8%)" : "hsl(24 9.8% 10%)";
 
   return (
     <>
       <ClerkProvider
         appearance={{
           variables: {
-            colorPrimary: "hsl(24 9.8% 10%)", // change this value (you can get it from you're css variables, make sure to include 'hsl' and commas)
+            colorPrimary: primaryHsl, // change this value (you can get it from you're css variables, make sure to include 'hsl' and commas)
           },
         }}
       >
