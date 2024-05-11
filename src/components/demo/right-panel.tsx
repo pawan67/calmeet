@@ -62,6 +62,7 @@ export function RightPanel({
     })
     .split(" ");
 
+  console.log("dayNumber", dayNumber, dayName);
   return (
     <Tabs
       defaultValue="12"

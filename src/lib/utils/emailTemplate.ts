@@ -23,7 +23,8 @@ export const generateHTML = (
   eventType: EventType,
   booking: Booking,
   date: Date,
-  link: string
+  link: string,
+  bookingLink: string
 ): string => {
   return `
   <html>
@@ -69,6 +70,7 @@ export const generateHTML = (
       <p>Attendee Email: ${attendeeUser.emailAddresses[0].emailAddress}</p>
       <p>Timezone: ${booking.timeZone}</p>
       <p>Link for the meeting: p> <a href="${link}">${link}</a></p>
+      <p>Booking: p> <a href="${bookingLink}">${bookingLink}</a></p>
 
       <p>Best regards,</p>
       <p>Calmeet</p>
@@ -84,7 +86,8 @@ export const generateHTMLForAttendee = (
   eventType: EventType,
   booking: Booking,
   date: Date,
-  link: string
+  link: string,
+  bookingLink: string
 ): string => {
   return `
     <html>
@@ -130,7 +133,10 @@ export const generateHTMLForAttendee = (
         <p>Host Email: ${hostUser.emailAddresses[0].emailAddress}</p>
         <p>Timezone: ${booking.timeZone}</p>
         <p>Link for the meeting:  <a href="${link}">${link}</a></p>
-  
+        <p>Booking: p> <a href="${bookingLink}">${bookingLink}</a></p>
+
+        
+
         <p>Best regards,</p>
         <p>Calmeet</p>
       </div>

@@ -30,7 +30,7 @@ export const createBooking = async (booking: Booking) => {
       throw new Error("Event not found");
     }
 
-    const startTimeDate = new Date(booking.startTime);
+    const startTimeDate = new Date(booking.startTime)
 
     let endTime = new Date(booking.startTime);
 
@@ -74,13 +74,15 @@ export const createBooking = async (booking: Booking) => {
     const attendeeUser = await getAuthorById(booking.userId);
     console.log("hostUser", hostUser.emailAddresses[0].emailAddress);
     const link = `https://calmeet.vercel.app/video/${newBooking.id}`;
+    const bookingLink = `https://calmeet.vercel.app/booking/${newBooking.id}`;
     const htmlContent = generateHTML(
       hostUser,
       attendeeUser,
       eventType,
       booking,
       startTimeDate,
-      link
+      link,
+      bookingLink 
     );
 
     const htmlContent2 = generateHTMLForAttendee(
@@ -89,7 +91,8 @@ export const createBooking = async (booking: Booking) => {
       eventType,
       booking,
       startTimeDate,
-      link
+      link,
+      bookingLink
     );
 
     await sendEmail({

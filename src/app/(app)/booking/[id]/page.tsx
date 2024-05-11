@@ -8,6 +8,9 @@ import Logo from "@/components/shared/logo";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { SiMicrosoftoutlook } from "react-icons/si";
+import { FaYahoo } from "react-icons/fa6";
+
 import {
   Card,
   CardContent,
@@ -49,6 +52,43 @@ const BookingPage = ({
 
   if (isBookingLoading || isHostDataLoading || isAttendeeDataLoading)
     return <FullPageLoader />;
+
+  const googleLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${
+    data?.event?.title
+  }&dates=${moment(data?.startTime).format("YYYYMMDDTHHmmss")}/${moment(
+    data?.endTime
+  ).format("YYYYMMDDTHHmmss")}&details=${
+    data?.note
+  }&location=https://calmeet.vercel.app/video/${data?.id}&sf=true&output=xml`;
+
+  const outlookLink = `https://outlook.live.com/owa/?path=/calendar/action/compose&rru=addevent&subject=${
+    data?.event?.title
+  }&startdt=${moment(data?.startTime).format("YYYYMMDDTHHmmss")}&enddt=${moment(
+    data?.endTime
+  ).format("YYYYMMDDTHHmmss")}&body=${
+    data?.note
+  }&location=https://calmeet.vercel.app/video/${data?.id}`;
+
+  const yahooLink = `https://calendar.yahoo.com/?v=60&view=d&type=20&title=${
+    data?.event?.title
+  }&st=${moment(data?.startTime).format("YYYYMMDDTHHmmss")}&et=${moment(
+    data?.endTime
+  ).format("YYYYMMDDTHHmmss")}&desc=${
+    data?.note
+  }&in_loc=https://calmeet.vercel.app/video/${data?.id}`;
+
+  const icsLink = `data:text/calendar;charset=utf8,${encodeURIComponent(`
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:${data?.event?.title}
+DTSTART:${moment(data?.startTime).format("YYYYMMDDTHHmmss")}
+DTEND:${moment(data?.endTime).format("YYYYMMDDTHHmmss")}
+DESCRIPTION:${data?.note}
+LOCATION:https://calmeet.vercel.app/video/${data?.id}
+END:VEVENT
+END:VCALENDAR
+`)}`;
 
   return (
     <div className=" container flex items-center justify-center">
@@ -122,7 +162,9 @@ const BookingPage = ({
                   size: "icon",
                   variant: "outline",
                 })}
-                href={"/"}
+                target="_blank"
+                rel="noreferrer noopener"
+                href={googleLink}
               >
                 <IconBrandGoogle />
               </Link>
@@ -131,9 +173,30 @@ const BookingPage = ({
                   size: "icon",
                   variant: "outline",
                 })}
-                href={"/"}
+                href={outlookLink}
+                target="_blank"
+                rel="noreferrer noopener"
               >
-                <IconBrandTeams />
+                <SiMicrosoftoutlook />
+              </Link>
+              <Link
+                className={buttonVariants({
+                  size: "icon",
+                  variant: "outline",
+                })}
+                href={yahooLink}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <FaYahoo />
+              </Link>
+              <Link
+                className={buttonVariants({
+                  variant: "outline",
+                })}
+                href={icsLink}
+              >
+                ICS
               </Link>
             </div>
           </div>
