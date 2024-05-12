@@ -19,7 +19,11 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <div vaul-drawer-wrapper="" className="bg-background">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

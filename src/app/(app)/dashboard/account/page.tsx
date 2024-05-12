@@ -3,8 +3,8 @@ import { UserProfile } from "@clerk/nextjs";
 
 const AccountPage = () => {
   return (
-    <div className=" w-full">
-      <UserProfile  />
+    <div className=" container">
+      <UserProfile />
     </div>
   );
 };

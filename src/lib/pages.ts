@@ -11,6 +11,8 @@ import {
   Globe,
   SquareArrowOutUpRight,
   SwatchBook,
+  HelpingHand,
+  BadgeInfo,
 } from "lucide-react";
 
 type Submenu = {
@@ -74,6 +76,13 @@ export function getPages(pathname: string): Group[] {
           label: "Account",
           active: pathname.includes("/account"),
           icon: Settings,
+          submenus: [],
+        },
+        {
+          href: "/dashboard/help",
+          label: "Help",
+          active: pathname.includes("/help"),
+          icon: BadgeInfo,
           submenus: [],
         },
       ],

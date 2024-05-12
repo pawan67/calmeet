@@ -1,8 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Copy, Ellipsis, LogOut, SquareArrowOutUpRight } from "lucide-react";
+import {
+  Copy,
+  Ellipsis,
+  LogOut,
+  QrCode,
+  SquareArrowOutUpRight,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
+import QrCodeStamp from "react-qr-code";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -17,7 +24,17 @@ import {
 import { getPages } from "@/lib/pages";
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "sonner";
-
+import {
+  Credenza,
+  CredenzaBody,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
+} from "@/components/ui/credenza";
 interface MenuProps {
   isOpen: boolean | undefined;
 }
@@ -168,6 +185,55 @@ export function Menu({ isOpen }: MenuProps) {
                 )}
               </Tooltip>
             </TooltipProvider>
+            <Credenza>
+              <CredenzaTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start h-10 mt-4"
+                >
+                  <span className={cn(isOpen === false ? "" : "mr-4")}>
+                    <QrCode size={18} />
+                  </span>
+                  <p
+                    className={cn(
+                      "whitespace-nowrap",
+                      isOpen === false ? "opacity-0 hidden" : "opacity-100"
+                    )}
+                  >
+                    Public Page QR Code
+                  </p>
+                </Button>
+              </CredenzaTrigger>
+              <CredenzaContent>
+                <CredenzaHeader>
+                  <CredenzaTitle>QR code for your public page</CredenzaTitle>
+                  <CredenzaDescription>
+                    Share this QR code to allow others to access your public
+                    page.
+                  </CredenzaDescription>
+                </CredenzaHeader>
+                <CredenzaBody>
+                  <div className=" mx-auto mt-5 max-w-[300px] border p-5 bg-white rounded-xl">
+                    <QrCodeStamp
+                      size={256}
+                      style={{
+                        height: "auto",
+                        maxWidth: "100%",
+                        width: "100%",
+                      }}
+                      value={`${window.location.origin}/${userId}`}
+                      viewBox={`0 0 256 256`}
+                    />
+                  </div>
+                </CredenzaBody>
+
+                <CredenzaFooter>
+                  <CredenzaClose asChild>
+                    <Button variant="ghost" >Close</Button>
+                  </CredenzaClose>
+                </CredenzaFooter>
+              </CredenzaContent>
+            </Credenza>
             <TooltipProvider disableHoverableContent>
               <Tooltip delayDuration={100}>
                 <TooltipTrigger asChild>
