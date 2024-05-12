@@ -69,7 +69,7 @@ export const generateHTML = (
       <p>Attendee: ${attendeeUser.firstName} ${attendeeUser.lastName || ""}</p>
       <p>Attendee Email: ${attendeeUser.emailAddresses[0].emailAddress}</p>
       <p>Timezone: ${booking.timeZone}</p>
-      <p>Link for the meeting: p> <a href="${link}">${link}</a></p>
+      <p>Link for the meeting:  <a href="${link}">Link</a></p>
       <p>Booking: <a href="${bookingLink}">Booking details</a></p>
 
       <p>Best regards,</p>
@@ -132,7 +132,7 @@ export const generateHTMLForAttendee = (
         <p>Your Email: ${attendeeUser.emailAddresses[0].emailAddress}</p>
         <p>Host Email: ${hostUser.emailAddresses[0].emailAddress}</p>
         <p>Timezone: ${booking.timeZone}</p>
-        <p>Link for the meeting:  <a href="${link}">${link}</a></p>
+        <p>Link for the meeting:  <a href="${link}">Link</a></p>
         <p>Booking: <a href="${bookingLink}">Booking details</a></p>
 
         
@@ -197,7 +197,7 @@ export const generateHTMLForGuests = (
       
         <p>Host Email: ${hostUser.emailAddresses[0].emailAddress}</p>
         <p>Timezone: ${booking.timeZone}</p>
-        <p>Link for the meeting:  <a href="${link}">${link}</a></p>
+        <p>Link for the meeting:  <a href="${link}">Link</a></p>
         <p>Booking: <a href="${bookingLink}">Booking details</a></p>
 
         

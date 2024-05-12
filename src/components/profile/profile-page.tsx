@@ -24,6 +24,7 @@ const PublicProfileBooking = ({ userId }: { userId: string }) => {
   } = useQuery({
     queryKey: ["user", userId],
     queryFn: () => getAuthorById(userId),
+    refetchInterval: 2000,
   });
   const {
     data: events,

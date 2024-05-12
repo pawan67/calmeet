@@ -1,8 +1,8 @@
 "use client";
-import { changeThemeOfUser } from "@/actions/user.actions";
+import { changeThemeOfUser, getAuthorById } from "@/actions/user.actions";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useUser } from "@clerk/nextjs";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -92,16 +92,22 @@ const AppearanceCard = ({
   forBookingPage?: boolean;
 }) => {
   const { setTheme, theme: currentTheme } = useTheme();
-  const { user } = useUser();
+  const { userId } = useAuth();
+  const { data: userData } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: async () => {
+      return await getAuthorById(userId!!);
+    },
+    enabled: !!userId,
+  });
   const router = useRouter();
-  console.log("user", user?.publicMetadata);
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: async (theme: string) => {
       // change theme of user
       console.log("change theme of user", theme);
-      if (!user) return;
-      await changeThemeOfUser(user?.id, theme);
+      if (!userId) return;
+      await changeThemeOfUser(userId, theme);
       return theme;
     },
     onSuccess: (data) => {
@@ -121,14 +127,14 @@ const AppearanceCard = ({
           setTheme(theme);
         }
       }}
-      className=" flex flex-col items-center justify-center"
+      className=" cursor-pointer hover:scale-95 active:scale-100 flex flex-col items-center justify-center"
     >
       <img
         src={img}
         alt="theme"
         className={`rounded-lg ${
           forBookingPage
-            ? user?.publicMetadata?.theme === theme && " border-4"
+            ? userData?.publicMetadata?.theme === theme && " border-4"
             : currentTheme === theme && " border-4"
         } border-primary`}
       />
