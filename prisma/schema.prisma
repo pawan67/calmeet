@@ -29,6 +29,8 @@ model EventType {
   bookings          Booking[]
 }
 
+
+
 model Booking {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())

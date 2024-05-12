@@ -1,6 +1,11 @@
 "use client";
+import { changeThemeOfUser } from "@/actions/user.actions";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useUser } from "@clerk/nextjs";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const AppearancePage = () => {
   return (
@@ -11,16 +16,16 @@ const AppearancePage = () => {
       <div className=" my-5">
         <Card className=" ">
           <CardHeader className=" border-b">
-            <h3 className="  font-semibold">App Theme</h3>
+            <h3 className="  font-semibold">Dashboard Theme</h3>
             <p className=" text-sm">
-              This applies to the current device and browser
+              This only applies to your logged in dashboard
             </p>
           </CardHeader>
 
           <CardContent>
             <div className=" grid grid-cols-2 sm:grid-cols-3 gap-5 mt-5">
               <AppearanceCard
-                title="System"
+                title="System default"
                 img="/images/theme/theme-system.svg"
                 theme="system"
               />
@@ -38,6 +43,39 @@ const AppearancePage = () => {
           </CardContent>
         </Card>
       </div>
+      <div className=" my-5">
+        <Card className=" ">
+          <CardHeader className=" border-b">
+            <h3 className="  font-semibold">Booking Page Theme</h3>
+            <p className=" text-sm">
+              This only applies to your public booking pages
+            </p>
+          </CardHeader>
+
+          <CardContent>
+            <div className=" grid grid-cols-2 sm:grid-cols-3 gap-5 mt-5">
+              <AppearanceCard
+                forBookingPage
+                title="System"
+                img="/images/theme/theme-system.svg"
+                theme="system"
+              />
+              <AppearanceCard
+                forBookingPage
+                title="Light"
+                img="/images/theme/theme-light.svg"
+                theme="light"
+              />
+              <AppearanceCard
+                forBookingPage
+                title="Dark"
+                img="/images/theme/theme-dark.svg"
+                theme="dark"
+              />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
@@ -46,17 +84,42 @@ const AppearanceCard = ({
   title,
   img,
   theme,
+  forBookingPage = false,
 }: {
   title: string;
   img: string;
   theme: string;
+  forBookingPage?: boolean;
 }) => {
   const { setTheme, theme: currentTheme } = useTheme();
+  const { user } = useUser();
+  const router = useRouter();
+  console.log("user", user?.publicMetadata);
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: async (theme: string) => {
+      // change theme of user
+      console.log("change theme of user", theme);
+      if (!user) return;
+      await changeThemeOfUser(user?.id, theme);
+      return theme;
+    },
+    onSuccess: (data) => {
+      toast.success(`Theme changed successfully to ${data} mode `);
+      queryClient.invalidateQueries();
+    },
+  });
 
   return (
     <div
       onClick={() => {
-        setTheme(theme);
+        if (forBookingPage) {
+          // change booking page theme
+          console.log("change booking page theme", theme);
+          mutate(theme);
+        } else {
+          setTheme(theme);
+        }
       }}
       className=" flex flex-col items-center justify-center"
     >
@@ -64,7 +127,9 @@ const AppearanceCard = ({
         src={img}
         alt="theme"
         className={`rounded-lg ${
-          currentTheme === theme && " border-4"
+          forBookingPage
+            ? user?.publicMetadata?.theme === theme && " border-4"
+            : currentTheme === theme && " border-4"
         } border-primary`}
       />
 

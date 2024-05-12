@@ -14,6 +14,7 @@ import Link from "next/link";
 import { getAuthorById } from "@/actions/user.actions";
 import FullPageLoader from "../shared/loader";
 import { notFound } from "next/navigation";
+import { useTheme } from "next-themes";
 
 const PublicProfileBooking = ({ userId }: { userId: string }) => {
   const {
@@ -32,6 +33,14 @@ const PublicProfileBooking = ({ userId }: { userId: string }) => {
     queryKey: ["user-events", userId],
     queryFn: () => getUserEvents(userId),
   });
+
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    if (user?.publicMetadata?.theme) {
+      setTheme(user.publicMetadata.theme);
+    }
+  }, [user]);
 
   if (error) {
     return notFound();
@@ -124,7 +133,6 @@ const EventTypeCard = ({
   }>;
   username: string;
 }) => {
-  
   return (
     <Link href={`/event-book/${eventType.id}`}>
       <Card

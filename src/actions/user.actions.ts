@@ -28,3 +28,18 @@ export const getUserByUsername = async (username: string) => {
     throw new Error("Something went wrong");
   }
 };
+
+export const changeThemeOfUser = async (id: string, theme: string) => {
+  try {
+    const user = await clerkClient.users.updateUser(id, {
+      publicMetadata: {
+        theme,
+      },
+    });
+
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    console.error("ERROR AT changeThemeOfUser", error);
+    throw new Error("Something went wrong");
+  }
+};
