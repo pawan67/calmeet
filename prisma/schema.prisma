@@ -82,4 +82,6 @@ model AppointmentSchema {
   startTime DateTime
   endTime   DateTime
   timeZone  String?
+  attendeeId String?
+  title     String?
 }

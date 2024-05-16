@@ -62,11 +62,13 @@ export const createBooking = async (booking: Booking) => {
     await db.appointmentSchema.create({
       data: {
         userId: eventType.authorId,
+        attendeeId: booking.userId,
         startTime: startTimeDate,
         endTime: convertTimeToUTC(
           startTimeDate,
           eventType.durationInMinutes as number
         ),
+        title: eventType.title,
         bookingId: newBooking.id,
         timeZone: booking.timeZone,
       },

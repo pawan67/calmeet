@@ -13,6 +13,7 @@ import {
   SwatchBook,
   HelpingHand,
   BadgeInfo,
+  Calendar,
 } from "lucide-react";
 
 type Submenu = {
@@ -56,6 +57,18 @@ export function getPages(pathname: string): Group[] {
           label: "Bookings",
           active: pathname.includes("/dashboard/bookings"),
           icon: Timer,
+          submenus: [],
+        },
+      ],
+    },
+    {
+      groupLabel: "",
+      menus: [
+        {
+          href: "/dashboard/calendar",
+          label: "Calendar",
+          active: pathname.includes("/dashboard/calendar"),
+          icon: Calendar,
           submenus: [],
         },
       ],

@@ -263,3 +263,11 @@ button[data-localization-key="userProfile.start.dangerSection.deleteAccountButto
 .cl-formButtonReset {
   @apply text-foreground hover:bg-secondary;
 }
+
+.fc-next-button,
+.fc-prev-button,
+.fc-button {
+  background-color: #eee !important;
+  color: #333 !important;
+  border: none !important;
+}

@@ -12,7 +12,7 @@ export const availableSlots = async (
 ) => {
   console.log("CURRENT DATE", currentDate);
 
-  console.log("TRIGGERED")
+  console.log("TRIGGERED");
   try {
     const date = new Date(currentDate);
 
@@ -42,4 +42,25 @@ export const availableSlots = async (
   } catch (error: any) {
     throw new Error(error.message);
   }
+};
+
+export const getFormattedAppointments = async (userId: string) => {
+  const appointments = await db.appointmentSchema.findMany({
+    where: {
+      OR: [{ userId: userId }, { attendeeId: userId }],
+    },
+    include: {
+      booking: true,
+    },
+  });
+
+  const formattedAppointments = appointments.map((appointment) => {
+    return {
+      title: appointment.title,
+      start: appointment.startTime.toISOString(), // Include both date and time
+      end: appointment.endTime.toISOString(), // Include both date and time for end
+    };
+  });
+
+  return formattedAppointments;
 };
